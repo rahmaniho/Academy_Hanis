@@ -277,24 +277,89 @@
   });
 
   /* ------------------------------------------------------------------------
-     5. Portfolio Filter & Accessible Lightbox Viewer
+     5. Animated Portfolio Gallery, Beauty-Line Chapters & Lightbox Viewer
      ------------------------------------------------------------------------ */
-  const portfolioChips = [...document.querySelectorAll('.portfolio-chip')];
-  const portfolioItems = [...document.querySelectorAll('.portfolio-item')];
+  const portfolioChips = [...document.querySelectorAll('.portfolio-chip, [data-line-filter]')];
+  const portfolioItems = [...document.querySelectorAll('.portfolio-item, .gallery-work-card')];
+  const lineChapters = [...document.querySelectorAll('.gallery-line-chapter')];
   const lightbox = document.getElementById('portfolio-lightbox');
 
-  if (portfolioChips.length && portfolioItems.length) {
+  const triggerCardStagger = (cards) => {
+    if (reducedMotion.matches) return;
+    cards.forEach((card, i) => {
+      card.classList.remove('is-entering');
+      card.style.setProperty('--stagger', `${Math.min(i, 11) * 55}ms`);
+      void card.offsetWidth;
+      card.classList.add('is-entering');
+    });
+  };
+
+  /* Interactive pointer spotlight & subtle 3D editorial tilt */
+  if (!reducedMotion.matches && window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.gallery-work-card').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width - 0.5;
+        const py = y / rect.height - 0.5;
+        card.style.setProperty('--mx', `${x.toFixed(0)}px`);
+        card.style.setProperty('--my', `${y.toFixed(0)}px`);
+        card.style.setProperty('--rx', `${(-py * 3.6).toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${(px * 3.6).toFixed(2)}deg`);
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+  }
+
+  if (portfolioChips.length && (portfolioItems.length || lineChapters.length)) {
     portfolioChips.forEach((chip) => {
       chip.addEventListener('click', () => {
-        const cat = chip.dataset.portfolioFilter || 'all';
+        const cat = chip.dataset.portfolioFilter || chip.dataset.lineFilter || 'all';
         portfolioChips.forEach((btn) => {
           const active = btn === chip;
           btn.classList.toggle('is-active', active);
           btn.setAttribute('aria-pressed', String(active));
         });
-        portfolioItems.forEach((item) => {
-          const cats = (item.dataset.category || '').split(/\s+/);
-          item.hidden = !(cat === 'all' || cats.includes(cat));
+
+        if (lineChapters.length) {
+          lineChapters.forEach((chapter) => {
+            const lineKey = chapter.dataset.beautyLine || '';
+            chapter.hidden = !(cat === 'all' || lineKey === cat);
+          });
+          const newlyVisible = portfolioItems.filter((c) => !c.closest('[hidden]'));
+          triggerCardStagger(newlyVisible);
+        } else {
+          const newlyVisible = [];
+          portfolioItems.forEach((item) => {
+            const cats = (item.dataset.category || '').split(/\s+/);
+            const show = cat === 'all' || cats.includes(cat);
+            item.hidden = !show;
+            if (show) newlyVisible.push(item);
+          });
+          triggerCardStagger(newlyVisible);
+        }
+      });
+    });
+  }
+
+  /* Course Hub Tier Filter (All / Workshop / Comprehensive / VIP) */
+  const tierChips = [...document.querySelectorAll('[data-tier-filter]')];
+  const tierCards = [...document.querySelectorAll('.pricing-tier-card[data-tier-kind]')];
+  if (tierChips.length && tierCards.length) {
+    tierChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const kind = chip.dataset.tierFilter || 'all';
+        tierChips.forEach((btn) => {
+          const active = btn === chip;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', String(active));
+        });
+        tierCards.forEach((card) => {
+          card.hidden = !(kind === 'all' || card.dataset.tierKind === kind);
         });
       });
     });
@@ -305,6 +370,8 @@
     const lbCat = document.getElementById('lightbox-category');
     const lbTitle = document.getElementById('lightbox-title');
     const lbDesc = document.getElementById('lightbox-desc');
+    const lbSpecs = document.getElementById('lightbox-specs');
+    const lbCounter = document.getElementById('lightbox-counter');
     const lbCta = document.getElementById('lightbox-cta');
     const lbClose = lightbox.querySelector('.lightbox-close');
     const lbPrev = document.getElementById('lightbox-prev');
@@ -313,21 +380,41 @@
     let visibleTriggers = [];
     let currentIdx = 0;
     let lastFocusedTrigger = null;
+    let touchStartX = 0;
 
     const populateLightbox = (idx) => {
       if (!visibleTriggers.length) return;
       currentIdx = (idx + visibleTriggers.length) % visibleTriggers.length;
       const trigger = visibleTriggers[currentIdx];
-      const card = trigger.closest('.portfolio-item');
-      if (!card) return;
 
       if (lbImg) {
-        lbImg.src = trigger.dataset.full || trigger.querySelector('img')?.currentSrc || '';
-        lbImg.alt = trigger.dataset.title || '';
+        lbImg.classList.add('is-switching');
+        const nextSrc = trigger.dataset.full || trigger.querySelector('img')?.currentSrc || '';
+        const applyImg = () => {
+          lbImg.src = nextSrc;
+          lbImg.alt = trigger.dataset.title || '';
+          requestAnimationFrame(() => lbImg.classList.remove('is-switching'));
+        };
+        if (reducedMotion.matches) applyImg();
+        else setTimeout(applyImg, 110);
       }
       if (lbCat) lbCat.textContent = trigger.dataset.catLabel || '';
       if (lbTitle) lbTitle.textContent = trigger.dataset.title || '';
       if (lbDesc) lbDesc.textContent = trigger.dataset.desc || '';
+      if (lbCounter) {
+        lbCounter.textContent = `${String(currentIdx + 1).padStart(2, '0')} / ${String(visibleTriggers.length).padStart(2, '0')}`;
+      }
+      if (lbSpecs) {
+        lbSpecs.innerHTML = '';
+        [trigger.dataset.tech, trigger.dataset.material, trigger.dataset.duration]
+          .filter(Boolean)
+          .forEach((txt) => {
+            const chip = document.createElement('span');
+            chip.className = 'lightbox-spec-chip';
+            chip.textContent = txt;
+            lbSpecs.appendChild(chip);
+          });
+      }
       if (lbCta && trigger.dataset.link) {
         lbCta.href = trigger.dataset.link;
         lbCta.textContent = trigger.dataset.linkLabel || 'مشاهده بخش مرتبط ←';
@@ -336,8 +423,8 @@
 
     const openLightbox = (trigger) => {
       visibleTriggers = portfolioItems
-        .filter((item) => !item.hidden)
-        .map((item) => item.querySelector('.portfolio-trigger'))
+        .filter((item) => !item.hidden && !item.closest('[hidden]'))
+        .map((item) => item.querySelector('.portfolio-trigger, .gallery-work-trigger'))
         .filter(Boolean);
       const startIndex = Math.max(0, visibleTriggers.indexOf(trigger));
       lastFocusedTrigger = trigger;
@@ -360,7 +447,7 @@
     };
 
     portfolioItems.forEach((item) => {
-      const trigger = item.querySelector('.portfolio-trigger');
+      const trigger = item.querySelector('.portfolio-trigger, .gallery-work-trigger');
       if (trigger) {
         trigger.addEventListener('click', () => openLightbox(trigger));
       }
@@ -369,6 +456,17 @@
     lbClose?.addEventListener('click', closeLightbox);
     lbPrev?.addEventListener('click', () => populateLightbox(currentIdx - 1));
     lbNext?.addEventListener('click', () => populateLightbox(currentIdx + 1));
+
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches?.[0]?.screenX || 0;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      const diff = (e.changedTouches?.[0]?.screenX || 0) - touchStartX;
+      if (Math.abs(diff) > 45) {
+        populateLightbox(diff > 0 ? currentIdx - 1 : currentIdx + 1);
+      }
+    }, { passive: true });
 
     lightbox.addEventListener('click', (event) => {
       if (event.target === lightbox) closeLightbox();
@@ -488,8 +586,27 @@
   const conversionTabs = [...document.querySelectorAll('.conversion-tab')];
   const conversionPanels = [...document.querySelectorAll('.conversion-panel')];
 
-  const activateConversionTab = (flowId, preselectValue) => {
-    if (!conversionTabs.length) return;
+  const activateConversionTab = (flowId, preselectValue, preselectTier) => {
+    const applySelects = (container) => {
+      if (!container) return;
+      if (preselectValue) {
+        const selectEl = container.querySelector('select[name="selection"]');
+        if (selectEl && [...selectEl.options].some((opt) => opt.value === preselectValue)) {
+          selectEl.value = preselectValue;
+        }
+      }
+      if (preselectTier) {
+        const tierEl = container.querySelector('select[name="metaOption"]');
+        if (tierEl && [...tierEl.options].some((opt) => opt.value === preselectTier)) {
+          tierEl.value = preselectTier;
+        }
+      }
+    };
+
+    if (!conversionTabs.length) {
+      applySelects(document.querySelector('.conversion-panel'));
+      return;
+    }
     conversionTabs.forEach((tab) => {
       const isSelected = tab.dataset.flowTarget === flowId;
       tab.setAttribute('aria-selected', String(isSelected));
@@ -497,13 +614,7 @@
     conversionPanels.forEach((panel) => {
       const isMatch = panel.dataset.flowPanel === flowId;
       panel.hidden = !isMatch;
-      if (isMatch && preselectValue) {
-        const selectEl = panel.querySelector('select');
-        if (selectEl) {
-          const hasOption = [...selectEl.options].some((opt) => opt.value === preselectValue);
-          if (hasOption) selectEl.value = preselectValue;
-        }
-      }
+      if (isMatch) applySelects(panel);
     });
   };
 
@@ -517,15 +628,17 @@
     trigger.addEventListener('click', () => {
       const flow = trigger.dataset.openFlow;
       const item = trigger.dataset.flowItem || '';
-      activateConversionTab(flow, item);
+      const tier = trigger.dataset.flowTier || '';
+      activateConversionTab(flow, item, tier);
     });
   });
 
   const urlParams = new URLSearchParams(window.location.search);
   const requestedFlow = urlParams.get('flow');
   const requestedItem = urlParams.get('item');
-  if (requestedFlow && conversionTabs.length) {
-    activateConversionTab(requestedFlow, requestedItem || '');
+  const requestedTier = urlParams.get('tier');
+  if (requestedFlow || requestedItem || requestedTier) {
+    activateConversionTab(requestedFlow || 'course', requestedItem || '', requestedTier || '');
   }
 
   const toAsciiDigits = (str) =>
