@@ -1,470 +1,825 @@
-const menu = document.querySelector('.menu');
-const nav = document.querySelector('#nav');
-const defaultPageTitle = document.title;
+/* ==========================================================================
+   HANIS BEAUTY ACADEMY — INTERACTIVE ENGINE (Vanilla JS, Zero Dependencies)
+   ========================================================================== */
+(() => {
+  'use strict';
 
-menu.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menu.setAttribute('aria-expanded', String(open));
-  menu.textContent = open ? '×' : '☰';
-});
+  const basePrefix = document.documentElement.dataset.base || '';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const saveData = Boolean(navigator.connection && navigator.connection.saveData);
 
-nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  nav.classList.remove('open');
-  menu.setAttribute('aria-expanded', 'false');
-  menu.textContent = '☰';
-}));
-
-document.querySelector('#contact-form').addEventListener('submit', e => {
-  e.preventDefault();
-  document.querySelector('.form-message').textContent =
-    'فرم آماده است؛ برای ارسال درخواست، اتصال به سامانه یا راه ارتباطی آکادمی باید تنظیم شود.';
-});
-
-// Pre-select consultation topic when navigating from contextual CTAs.
-const interestSelect = document.querySelector('#contact-interest');
-document.querySelectorAll('.js-consult-link').forEach(link => {
-  link.addEventListener('click', () => {
-    const targetInterest = link.dataset.interest;
-    if (interestSelect && targetInterest) {
-      const opt = [...interestSelect.options].find(o => o.value === targetInterest);
-      if (opt) interestSelect.value = targetInterest;
-    }
-  });
-});
-
-// =========================================================================
-// 1. Scroll-driven Hero Cinema (assets/InShot_20261030_223328747.mp4)
-// =========================================================================
-const track = document.querySelector('.hero-scroll-track');
-const video = document.querySelector('.hero-video');
-const counter = document.querySelector('.scroll-percent');
-const hero = document.querySelector('.hero');
-const titles = [...document.querySelectorAll('.hero-title')];
-const indicator = document.querySelector('.hero-scroll');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let targetTime = 0;
-let scheduled = false;
-
-const clamp = value => Math.min(1, Math.max(0, value));
-const smooth = value => {
-  const t = clamp(value);
-  return t * t * (3 - 2 * t);
-};
-
-function renderHero() {
-  scheduled = false;
-  if (reduceMotion.matches) {
-    hero.style.removeProperty('--hero-scale');
-    hero.style.removeProperty('--hero-pan-x');
-    hero.style.removeProperty('--hero-pan-y');
-    titles.forEach((title, index) => {
-      title.style.removeProperty('--reveal');
-      title.classList.toggle('is-active', index === 0);
-      title.setAttribute('aria-hidden', String(index !== 0));
-    });
+  /* ------------------------------------------------------------------------
+     0. Legacy #article-* Hash Redirect to Dedicated SEO Article Pages
+     ------------------------------------------------------------------------ */
+  const legacyArticleMap = {
+    '#article-luxury-nail-art': 'magazine/luxury-nail-art/',
+    '#article-velvet-skin-makeup': 'magazine/velvet-skin-makeup/',
+    '#article-hair-color-revival': 'magazine/hair-color-revival/',
+    '#article-nail-structure-care': 'magazine/nail-structure-care/',
+    '#article-beauty-career-roadmap': 'magazine/beauty-career-roadmap/'
+  };
+  if (window.location.hash && legacyArticleMap[window.location.hash]) {
+    window.location.replace(basePrefix + legacyArticleMap[window.location.hash]);
     return;
   }
 
-  const distance = Math.max(1, track.offsetHeight - hero.offsetHeight);
-  const progress = clamp(-track.getBoundingClientRect().top / distance);
-  const camera = smooth(progress);
-  hero.style.setProperty('--hero-scale', (1.08 + 0.22 * camera).toFixed(3));
-  hero.style.setProperty('--hero-pan-x', (3 - 6 * camera).toFixed(2) + '%');
-  hero.style.setProperty('--hero-pan-y', (-1 + 2 * camera).toFixed(2) + '%');
+  /* ------------------------------------------------------------------------
+     1. Sticky Header, Mobile Drawer & Active Navigation State
+     ------------------------------------------------------------------------ */
+  const header = document.querySelector('.header');
+  const menuBtn = document.querySelector('.menu');
+  const nav = document.querySelector('.header nav');
 
-  const reveals = [
-    1 - smooth((progress - 0.19) / 0.11),
-    smooth((progress - 0.24) / 0.11) * (1 - smooth((progress - 0.56) / 0.11)),
-    smooth((progress - 0.61) / 0.11)
-  ];
-  const active = reveals.indexOf(Math.max(...reveals));
-  titles.forEach((title, index) => {
-    title.style.setProperty('--reveal', reveals[index].toFixed(3));
-    title.classList.toggle('is-active', index === active);
-    title.setAttribute('aria-hidden', String(index !== active));
-  });
-  counter.textContent = String(Math.round(progress * 100)).padStart(2, '0');
-  indicator.style.setProperty('--progress', progress);
-  if (Number.isFinite(video.duration) && video.duration > 0) {
-    targetTime = progress * Math.max(0, video.duration - 0.04);
-    if (!video.seeking && Math.abs(video.currentTime - targetTime) > 0.04) {
-      try { video.currentTime = targetTime; } catch (_) { /* Show the poster if seeking is unavailable. */ }
-    }
-  }
-}
+  const updateHeaderScroll = () => {
+    if (!header || header.classList.contains('header-solid')) return;
+    header.classList.toggle('is-scrolled', window.scrollY > 36);
+  };
+  updateHeaderScroll();
+  window.addEventListener('scroll', updateHeaderScroll, { passive: true });
 
-function scheduleHero() {
-  if (!scheduled) {
-    scheduled = true;
-    requestAnimationFrame(renderHero);
-  }
-}
-
-video.addEventListener('loadeddata', () => { video.classList.add('is-ready'); scheduleHero(); });
-video.addEventListener('loadedmetadata', scheduleHero);
-video.addEventListener('seeked', () => { if (Math.abs(video.currentTime - targetTime) > 0.04) scheduleHero(); });
-video.addEventListener('error', () => video.classList.remove('is-ready'));
-window.addEventListener('scroll', scheduleHero, { passive: true });
-window.addEventListener('resize', scheduleHero);
-if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', scheduleHero);
-else reduceMotion.addListener(scheduleHero);
-scheduleHero();
-
-// =========================================================================
-// 2. Active Navigation Scroll-Spy
-// =========================================================================
-const navLinks = [...nav.querySelectorAll('a[href^="#"]')];
-const spySections = navLinks
-  .map(a => document.querySelector(a.getAttribute('href')))
-  .filter(Boolean);
-
-function updateActiveNav() {
-  const scrollMid = window.scrollY + window.innerHeight * 0.35;
-  let currentId = 'home';
-  spySections.forEach(sec => {
-    if (sec.offsetTop <= scrollMid) currentId = sec.id;
-  });
-  navLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + currentId);
-  });
-}
-window.addEventListener('scroll', updateActiveNav, { passive: true });
-
-// =========================================================================
-// 3. Ambient Background Videos (#courses at 35% & #articles at 30% opacity)
-// =========================================================================
-function initAmbientSectionVideo(sectionSelector, videoSelector, playbackRate) {
-  const sectionEl = document.querySelector(sectionSelector);
-  const videoEl = document.querySelector(videoSelector);
-  if (!sectionEl || !videoEl) return;
-
-  const applyRate = () => {
-    try {
-      videoEl.defaultPlaybackRate = playbackRate;
-      videoEl.playbackRate = playbackRate;
-    } catch (_) { /* Fallback to normal rate if unsupported */ }
+  const closeMenu = () => {
+    if (!nav || !menuBtn) return;
+    nav.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
   };
 
-  videoEl.addEventListener('loadedmetadata', applyRate);
-  videoEl.addEventListener('play', applyRate);
-  applyRate();
-
-  let sectionInView = false;
-  const syncPlayback = inView => {
-    if (reduceMotion.matches) {
-      videoEl.pause();
-      return;
-    }
-    if (inView) {
-      applyRate();
-      videoEl.play().catch(() => {});
-    } else if (!videoEl.paused) {
-      videoEl.pause();
-    }
-  };
-
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        sectionInView = entry.isIntersecting;
-        syncPlayback(sectionInView);
-      });
-    }, { rootMargin: '250px 0px', threshold: 0.01 });
-    observer.observe(sectionEl);
-  } else {
-    syncPlayback(true);
-  }
-
-  const onMotionPrefChange = () => syncPlayback(sectionInView);
-  if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onMotionPrefChange);
-  else reduceMotion.addListener(onMotionPrefChange);
-}
-
-initAmbientSectionVideo('#courses', '#courses-bg-video', 0.8);
-initAmbientSectionVideo('#articles', '#articles-bg-video', 0.6);
-
-// =========================================================================
-// 4. Articles Category Filtering & Persian-Normalized Instant Search
-// =========================================================================
-const filterChips = [...document.querySelectorAll('.filter-chip')];
-const searchInput = document.querySelector('#article-search-input');
-const articleItems = [...document.querySelectorAll('.js-article-item')];
-const emptyState = document.querySelector('#articles-empty');
-const resetBtn = document.querySelector('#articles-reset-btn');
-let activeCategory = 'all';
-
-function normalizePersian(str) {
-  return (str || '')
-    .toLowerCase()
-    .replace(/ي/g, 'ی')
-    .replace(/ك/g, 'ک')
-    .replace(/\u200c/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function applyArticleFilters() {
-  const query = normalizePersian(searchInput ? searchInput.value : '');
-  let visibleCount = 0;
-
-  articleItems.forEach(item => {
-    const matchesCat = activeCategory === 'all' || item.dataset.category === activeCategory;
-    const textContent = normalizePersian(item.textContent);
-    const matchesQuery = !query || textContent.includes(query);
-    const show = matchesCat && matchesQuery;
-
-    item.hidden = !show;
-    if (show) visibleCount += 1;
-  });
-
-  if (emptyState) emptyState.hidden = visibleCount > 0;
-}
-
-filterChips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    activeCategory = chip.dataset.filter || 'all';
-    filterChips.forEach(c => {
-      const isSelected = c === chip;
-      c.classList.toggle('is-active', isSelected);
-      c.setAttribute('aria-pressed', String(isSelected));
+  if (menuBtn && nav) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
     });
-    applyArticleFilters();
-  });
-});
 
-if (searchInput) {
-  searchInput.addEventListener('input', applyArticleFilters);
-}
-
-if (resetBtn) {
-  resetBtn.addEventListener('click', () => {
-    activeCategory = 'all';
-    if (searchInput) searchInput.value = '';
-    filterChips.forEach(c => {
-      const isAll = c.dataset.filter === 'all';
-      c.classList.toggle('is-active', isAll);
-      c.setAttribute('aria-pressed', String(isAll));
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
     });
-    applyArticleFilters();
-  });
-}
 
-// =========================================================================
-// 5. Editorial Article Reader Modal + Deep-Linking (#article-...)
-// =========================================================================
-const modal = document.querySelector('#article-modal');
-const modalScroller = document.querySelector('#article-modal-scroller');
-const modalProgressBar = document.querySelector('#reader-progress-bar');
-const modalCategory = document.querySelector('#modal-article-category');
-const modalReadtime = document.querySelector('#modal-article-readtime');
-const modalDate = document.querySelector('#modal-article-date');
-const modalTitle = document.querySelector('#modal-article-title');
-const modalToc = document.querySelector('#modal-toc');
-const modalBody = document.querySelector('#modal-article-body');
-const modalMedia = document.querySelector('#modal-media-container');
-const modalCloseBtn = document.querySelector('#modal-close-btn');
-const modalCopyBtn = document.querySelector('#modal-copy-link');
-const modalConsultCta = document.querySelector('#modal-consult-cta');
-const modalPrevBtn = document.querySelector('#modal-prev-article');
-const modalNextBtn = document.querySelector('#modal-next-article');
-
-let currentArticleId = null;
-let lastTriggerElement = null;
-
-function updateReaderProgress() {
-  if (!modalScroller || !modalProgressBar) return;
-  const maxScroll = Math.max(1, modalScroller.scrollHeight - modalScroller.clientHeight);
-  const pct = (modalScroller.scrollTop / maxScroll) * 100;
-  modalProgressBar.style.width = `${Math.min(100, Math.max(0, pct)).toFixed(1)}%`;
-}
-
-function closeArticleModal(restoreHash = true) {
-  if (!modal || !modal.open) return;
-  modal.close();
-  document.body.style.overflow = '';
-  document.title = defaultPageTitle;
-  currentArticleId = null;
-
-  if (restoreHash && window.location.hash.startsWith('#article-')) {
-    history.replaceState(null, '', '#articles');
-  }
-  if (lastTriggerElement && typeof lastTriggerElement.focus === 'function') {
-    lastTriggerElement.focus({ preventScroll: true });
-  }
-}
-
-function openArticleById(articleId, updateUrl = true) {
-  const articleEl = document.getElementById(articleId);
-  if (!articleEl || !modal) return;
-
-  currentArticleId = articleId;
-  const headlineEl = articleEl.querySelector('[itemprop="headline"]');
-  const sectionEl = articleEl.querySelector('[itemprop="articleSection"]');
-  const dateEl = articleEl.querySelector('time[itemprop="datePublished"]');
-  const fullBodyEl = articleEl.querySelector('.article-full-body');
-  const readTimeEl = articleEl.querySelector('.read-pill') ||
-    [...articleEl.querySelectorAll('.article-meta-bar span')].find(s => s.textContent.includes('مطالعه'));
-
-  const headline = headlineEl ? headlineEl.textContent.trim() : '';
-  if (modalTitle) modalTitle.textContent = headline;
-  if (modalCategory) modalCategory.textContent = sectionEl ? sectionEl.textContent.trim() : 'مقاله تخصصی';
-  if (modalReadtime) modalReadtime.textContent = readTimeEl ? readTimeEl.textContent.trim() : '۶ دقیقه مطالعه';
-  if (modalDate && dateEl) {
-    modalDate.textContent = `تاریخ انتشار: ${dateEl.textContent.trim()}`;
-    modalDate.setAttribute('datetime', dateEl.getAttribute('datetime') || '');
-  }
-
-  // Render Editorial Cover inside Reader Sidebar
-  if (modalMedia) {
-    modalMedia.innerHTML = '';
-    const imageSrc = articleEl.dataset.image;
-    if (imageSrc) {
-      const wrap = document.createElement('div');
-      wrap.className = 'modal-image-wrap';
-      const img = document.createElement('img');
-      const cardImg = articleEl.querySelector('img[itemprop="image"]');
-      img.src = imageSrc;
-      img.alt = cardImg ? cardImg.alt : headline;
-      wrap.appendChild(img);
-      modalMedia.appendChild(wrap);
-    }
-  }
-
-  // Populate Full Body & Auto-Build Table of Contents
-  if (modalBody && fullBodyEl) {
-    modalBody.innerHTML = fullBodyEl.innerHTML;
-    const headings = [...modalBody.querySelectorAll('h4')];
-    if (modalToc) {
-      if (headings.length > 0) {
-        modalToc.hidden = false;
-        modalToc.innerHTML = '<strong>فهرست سرفصل‌های این مقاله:</strong>';
-        const ol = document.createElement('ol');
-        headings.forEach((h, idx) => {
-          const secId = `reader-sec-${idx + 1}`;
-          h.id = secId;
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = `#${secId}`;
-          a.textContent = h.textContent;
-          a.addEventListener('click', ev => {
-            ev.preventDefault();
-            h.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
-          });
-          li.appendChild(a);
-          ol.appendChild(li);
-        });
-        modalToc.appendChild(ol);
-      } else {
-        modalToc.hidden = true;
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.classList.contains('open')) {
+        closeMenu();
+        menuBtn.focus();
       }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (nav.classList.contains('open') && !header.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------------
+     2. Subtle One-Time Scroll Reveal
+     ------------------------------------------------------------------------ */
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length) {
+    if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+      revealEls.forEach((el) => el.classList.add('is-visible'));
+    } else {
+      const revealObserver = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      );
+      revealEls.forEach((el) => revealObserver.observe(el));
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     3. Flagship Hero Scroll Cinema (#home)
+     ------------------------------------------------------------------------ */
+  const track = document.querySelector('.hero-scroll-track');
+  const hero = document.querySelector('.hero');
+  const video = document.querySelector('.hero-video');
+  const titles = [...document.querySelectorAll('.hero-title')];
+  const indexStrong = document.querySelector('.hero-index strong');
+
+  if (track && hero && titles.length) {
+    const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+    const smoothstep = (edge0, edge1, x) => {
+      const t = clamp((x - edge0) / (edge1 - edge0));
+      return t * t * (3 - 2 * t);
+    };
+
+    let duration = 0;
+    let targetProgress = 0;
+    let currentProgress = 0;
+    let rafId = 0;
+    let videoReady = false;
+    let videoPrimed = false;
+
+    const primeVideo = () => {
+      if (videoPrimed || !video || reducedMotion.matches) return;
+      videoPrimed = true;
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.then === 'function') {
+        playAttempt.then(() => video.pause()).catch(() => {});
+      }
+    };
+
+    if (video) {
+      const markReady = () => {
+        duration = Number.isFinite(video.duration) ? video.duration : 0;
+        if (duration > 0) {
+          videoReady = true;
+          video.classList.add('is-ready');
+          requestTick();
+        }
+      };
+      video.pause();
+      if (video.readyState >= 1) markReady();
+      video.addEventListener('loadedmetadata', markReady);
+      video.addEventListener('durationchange', markReady);
+      video.addEventListener('canplay', markReady, { once: true });
+      window.addEventListener('touchstart', primeVideo, { passive: true, once: true });
+      window.addEventListener('pointerdown', primeVideo, { passive: true, once: true });
     }
 
-    // Wire internal links inside modal prose
-    modalBody.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', ev => {
-        const href = link.getAttribute('href') || '';
-        if (link.dataset.target || href.startsWith('#article-')) {
-          ev.preventDefault();
-          openArticleById(link.dataset.target || href.slice(1));
+    const readScrollProgress = () => {
+      const rect = track.getBoundingClientRect();
+      const scrollable = track.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return 0;
+      return clamp(-rect.top / scrollable);
+    };
+
+    const updateTitles = (progress) => {
+      const count = titles.length;
+      const scaled = progress * count;
+      const activeIndex = Math.min(count - 1, Math.floor(scaled));
+
+      titles.forEach((title, idx) => {
+        const local = scaled - idx;
+        let reveal = 0;
+        if (idx === activeIndex) {
+          const enter = idx === 0 ? 1 : smoothstep(0, 0.28, local);
+          const exit = idx === count - 1 ? 1 : 1 - smoothstep(0.74, 1, local);
+          reveal = Math.min(enter, exit);
+        }
+        title.classList.toggle('is-active', idx === activeIndex);
+        title.style.setProperty('--reveal', reveal.toFixed(3));
+      });
+
+      if (indexStrong) {
+        indexStrong.textContent = String(activeIndex + 1).padStart(2, '0');
+      }
+    };
+
+    const renderHero = () => {
+      rafId = 0;
+      const delta = targetProgress - currentProgress;
+      currentProgress = Math.abs(delta) < 0.0008 ? targetProgress : currentProgress + delta * 0.14;
+
+      const scale = 1.08 - currentProgress * 0.06;
+      const panX = 3 - currentProgress * 4;
+      const panY = -1 + currentProgress * 2.5;
+      hero.style.setProperty('--progress', currentProgress.toFixed(4));
+      hero.style.setProperty('--hero-scale', scale.toFixed(4));
+      hero.style.setProperty('--hero-pan-x', `${panX.toFixed(2)}%`);
+      hero.style.setProperty('--hero-pan-y', `${panY.toFixed(2)}%`);
+
+      updateTitles(currentProgress);
+
+      if (videoReady && duration > 0 && video) {
+        const targetTime = clamp(currentProgress, 0, 0.999) * duration;
+        if (!video.seeking && Math.abs(video.currentTime - targetTime) > 0.03) {
+          try {
+            video.currentTime = targetTime;
+          } catch (_) {
+            /* ignore transient Safari seek guard */
+          }
+        }
+      }
+
+      if (Math.abs(targetProgress - currentProgress) >= 0.0008) {
+        rafId = window.requestAnimationFrame(renderHero);
+      }
+    };
+
+    function requestTick() {
+      if (reducedMotion.matches) {
+        titles.forEach((title, idx) => {
+          title.classList.toggle('is-active', idx === 0);
+          title.style.setProperty('--reveal', idx === 0 ? '1' : '0');
+        });
+        return;
+      }
+      targetProgress = readScrollProgress();
+      if (!rafId) rafId = window.requestAnimationFrame(renderHero);
+    }
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick);
+    reducedMotion.addEventListener('change', requestTick);
+    requestTick();
+  }
+
+  /* ------------------------------------------------------------------------
+     4. Lazy Ambient Background Videos (#courses 35% & #articles 30%)
+     ------------------------------------------------------------------------ */
+  const ambientSections = [
+    { section: document.querySelector('#courses'), video: document.querySelector('.courses-bg-video') },
+    { section: document.querySelector('#articles'), video: document.querySelector('.articles-bg-video') }
+  ].filter((item) => item.section && item.video);
+
+  ambientSections.forEach(({ section, video: bgVideo }) => {
+    bgVideo.muted = true;
+    bgVideo.defaultMuted = true;
+    bgVideo.playsInline = true;
+    let loadedSource = false;
+
+    const pauseAmbient = () => {
+      if (!bgVideo.paused) bgVideo.pause();
+    };
+
+    const playAmbient = () => {
+      if (reducedMotion.matches || saveData) {
+        pauseAmbient();
+        return;
+      }
+      if (!loadedSource) {
+        const dataSrc = bgVideo.dataset.src;
+        if (dataSrc && !bgVideo.getAttribute('src')) {
+          bgVideo.setAttribute('src', dataSrc);
+          bgVideo.load();
+        }
+        loadedSource = true;
+      }
+      const p = bgVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) playAmbient();
+            else pauseAmbient();
+          });
+        },
+        { rootMargin: '320px 0px', threshold: 0.01 }
+      );
+      io.observe(section);
+    } else {
+      playAmbient();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pauseAmbient();
+    });
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) pauseAmbient();
+    });
+  });
+
+  /* ------------------------------------------------------------------------
+     5. Animated Portfolio Gallery, Beauty-Line Chapters & Lightbox Viewer
+     ------------------------------------------------------------------------ */
+  const portfolioChips = [...document.querySelectorAll('.portfolio-chip, [data-line-filter]')];
+  const portfolioItems = [...document.querySelectorAll('.portfolio-item, .gallery-work-card')];
+  const lineChapters = [...document.querySelectorAll('.gallery-line-chapter')];
+  const lightbox = document.getElementById('portfolio-lightbox');
+
+  const triggerCardStagger = (cards) => {
+    if (reducedMotion.matches) return;
+    cards.forEach((card, i) => {
+      card.classList.remove('is-entering');
+      card.style.setProperty('--stagger', `${Math.min(i, 11) * 55}ms`);
+      void card.offsetWidth;
+      card.classList.add('is-entering');
+    });
+  };
+
+  /* Interactive pointer spotlight & subtle 3D editorial tilt */
+  if (!reducedMotion.matches && window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.gallery-work-card').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width - 0.5;
+        const py = y / rect.height - 0.5;
+        card.style.setProperty('--mx', `${x.toFixed(0)}px`);
+        card.style.setProperty('--my', `${y.toFixed(0)}px`);
+        card.style.setProperty('--rx', `${(-py * 3.6).toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${(px * 3.6).toFixed(2)}deg`);
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+  }
+
+  if (portfolioChips.length && (portfolioItems.length || lineChapters.length)) {
+    portfolioChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const cat = chip.dataset.portfolioFilter || chip.dataset.lineFilter || 'all';
+        portfolioChips.forEach((btn) => {
+          const active = btn === chip;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', String(active));
+        });
+
+        if (lineChapters.length) {
+          lineChapters.forEach((chapter) => {
+            const lineKey = chapter.dataset.beautyLine || '';
+            chapter.hidden = !(cat === 'all' || lineKey === cat);
+          });
+          const newlyVisible = portfolioItems.filter((c) => !c.closest('[hidden]'));
+          triggerCardStagger(newlyVisible);
         } else {
-          closeArticleModal(false);
+          const newlyVisible = [];
+          portfolioItems.forEach((item) => {
+            const cats = (item.dataset.category || '').split(/\s+/);
+            const show = cat === 'all' || cats.includes(cat);
+            item.hidden = !show;
+            if (show) newlyVisible.push(item);
+          });
+          triggerCardStagger(newlyVisible);
         }
       });
     });
   }
 
-  // Prev / Next Article Navigation
-  const idx = articleItems.findIndex(el => el.id === articleId);
-  if (idx !== -1 && articleItems.length > 1) {
-    const prevEl = articleItems[(idx - 1 + articleItems.length) % articleItems.length];
-    const nextEl = articleItems[(idx + 1) % articleItems.length];
-    if (modalPrevBtn && prevEl) {
-      const prevTitle = prevEl.querySelector('[itemprop="headline"]').textContent.trim();
-      modalPrevBtn.innerHTML = `<small>→ مقاله قبلی</small><span>${prevTitle}</span>`;
-      modalPrevBtn.onclick = () => openArticleById(prevEl.id);
-    }
-    if (modalNextBtn && nextEl) {
-      const nextTitle = nextEl.querySelector('[itemprop="headline"]').textContent.trim();
-      modalNextBtn.innerHTML = `<small>مقاله بعدی ←</small><span>${nextTitle}</span>`;
-      modalNextBtn.onclick = () => openArticleById(nextEl.id);
-    }
+  /* Course Hub Tier Filter (All / Workshop / Comprehensive / VIP) */
+  const tierChips = [...document.querySelectorAll('[data-tier-filter]')];
+  const tierCards = [...document.querySelectorAll('.pricing-tier-card[data-tier-kind]')];
+  if (tierChips.length && tierCards.length) {
+    tierChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const kind = chip.dataset.tierFilter || 'all';
+        tierChips.forEach((btn) => {
+          const active = btn === chip;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', String(active));
+        });
+        tierCards.forEach((card) => {
+          card.hidden = !(kind === 'all' || card.dataset.tierKind === kind);
+        });
+      });
+    });
   }
 
-  if (modalConsultCta) {
-    modalConsultCta.onclick = () => {
-      if (interestSelect) {
-        interestSelect.value = articleEl.dataset.category === 'career'
-          ? 'مشاوره انتخاب لاین شغلی'
-          : 'دوره‌های آموزشی (میکاپ، ناخن، مو)';
+  if (lightbox && portfolioItems.length) {
+    const lbImg = document.getElementById('lightbox-image');
+    const lbCat = document.getElementById('lightbox-category');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbDesc = document.getElementById('lightbox-desc');
+    const lbSpecs = document.getElementById('lightbox-specs');
+    const lbCounter = document.getElementById('lightbox-counter');
+    const lbCta = document.getElementById('lightbox-cta');
+    const lbClose = lightbox.querySelector('.lightbox-close');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    let visibleTriggers = [];
+    let currentIdx = 0;
+    let lastFocusedTrigger = null;
+    let touchStartX = 0;
+
+    const populateLightbox = (idx) => {
+      if (!visibleTriggers.length) return;
+      currentIdx = (idx + visibleTriggers.length) % visibleTriggers.length;
+      const trigger = visibleTriggers[currentIdx];
+
+      if (lbImg) {
+        lbImg.classList.add('is-switching');
+        const nextSrc = trigger.dataset.full || trigger.querySelector('img')?.currentSrc || '';
+        const applyImg = () => {
+          lbImg.src = nextSrc;
+          lbImg.alt = trigger.dataset.title || '';
+          requestAnimationFrame(() => lbImg.classList.remove('is-switching'));
+        };
+        if (reducedMotion.matches) applyImg();
+        else setTimeout(applyImg, 110);
       }
-      closeArticleModal(false);
+      if (lbCat) lbCat.textContent = trigger.dataset.catLabel || '';
+      if (lbTitle) lbTitle.textContent = trigger.dataset.title || '';
+      if (lbDesc) lbDesc.textContent = trigger.dataset.desc || '';
+      if (lbCounter) {
+        lbCounter.textContent = `${String(currentIdx + 1).padStart(2, '0')} / ${String(visibleTriggers.length).padStart(2, '0')}`;
+      }
+      if (lbSpecs) {
+        lbSpecs.innerHTML = '';
+        [trigger.dataset.tech, trigger.dataset.material, trigger.dataset.duration]
+          .filter(Boolean)
+          .forEach((txt) => {
+            const chip = document.createElement('span');
+            chip.className = 'lightbox-spec-chip';
+            chip.textContent = txt;
+            lbSpecs.appendChild(chip);
+          });
+      }
+      if (lbCta && trigger.dataset.link) {
+        lbCta.href = trigger.dataset.link;
+        lbCta.textContent = trigger.dataset.linkLabel || 'مشاهده بخش مرتبط ←';
+      }
     };
-  }
 
-  if (!modal.open) {
-    if (typeof modal.showModal === 'function') modal.showModal();
-    else modal.setAttribute('open', '');
-  }
-  document.body.style.overflow = 'hidden';
-  if (modalScroller) modalScroller.scrollTop = 0;
-  updateReaderProgress();
-
-  document.title = `${headline} | مجله آکادمی زیبایی هانیس`;
-  if (updateUrl) {
-    history.replaceState(null, '', `#${articleId}`);
-  }
-}
-
-document.querySelectorAll('.js-open-article').forEach(trigger => {
-  trigger.addEventListener('click', ev => {
-    const targetId = trigger.dataset.target || (trigger.getAttribute('href') || '').replace(/^#/, '');
-    if (targetId && document.getElementById(targetId)) {
-      ev.preventDefault();
-      lastTriggerElement = trigger;
-      openArticleById(targetId);
-    }
-  });
-});
-
-if (modalScroller) {
-  modalScroller.addEventListener('scroll', updateReaderProgress, { passive: true });
-}
-if (modalCloseBtn) {
-  modalCloseBtn.addEventListener('click', () => closeArticleModal(true));
-}
-if (modal) {
-  modal.addEventListener('click', ev => {
-    if (ev.target === modal) closeArticleModal(true);
-  });
-  modal.addEventListener('close', () => {
-    document.body.style.overflow = '';
-    document.title = defaultPageTitle;
-  });
-}
-
-if (modalCopyBtn) {
-  modalCopyBtn.addEventListener('click', () => {
-    const shareUrl = `${window.location.origin}${window.location.pathname}#${currentArticleId || 'articles'}`;
-    const labelSpan = modalCopyBtn.querySelector('span');
-    const done = () => {
-      if (!labelSpan) return;
-      labelSpan.textContent = 'کپی شد ✓';
-      setTimeout(() => { labelSpan.textContent = 'کپی لینک'; }, 2000);
+    const openLightbox = (trigger) => {
+      visibleTriggers = portfolioItems
+        .filter((item) => !item.hidden && !item.closest('[hidden]'))
+        .map((item) => item.querySelector('.portfolio-trigger, .gallery-work-trigger'))
+        .filter(Boolean);
+      const startIndex = Math.max(0, visibleTriggers.indexOf(trigger));
+      lastFocusedTrigger = trigger;
+      populateLightbox(startIndex);
+      if (typeof lightbox.showModal === 'function') {
+        lightbox.showModal();
+      } else {
+        lightbox.setAttribute('open', '');
+      }
+      lbClose?.focus();
     };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(shareUrl).then(done).catch(done);
-    } else {
-      done();
-    }
-  });
-}
 
-// Open article automatically if page loads or navigates with #article-... hash
-function checkArticleHash() {
-  const hash = window.location.hash.replace(/^#/, '');
-  if (hash.startsWith('article-') && document.getElementById(hash)) {
-    openArticleById(hash, false);
+    const closeLightbox = () => {
+      if (typeof lightbox.close === 'function' && lightbox.open) {
+        lightbox.close();
+      } else {
+        lightbox.removeAttribute('open');
+      }
+      if (lastFocusedTrigger) lastFocusedTrigger.focus();
+    };
+
+    portfolioItems.forEach((item) => {
+      const trigger = item.querySelector('.portfolio-trigger, .gallery-work-trigger');
+      if (trigger) {
+        trigger.addEventListener('click', () => openLightbox(trigger));
+      }
+    });
+
+    lbClose?.addEventListener('click', closeLightbox);
+    lbPrev?.addEventListener('click', () => populateLightbox(currentIdx - 1));
+    lbNext?.addEventListener('click', () => populateLightbox(currentIdx + 1));
+
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches?.[0]?.screenX || 0;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      const diff = (e.changedTouches?.[0]?.screenX || 0) - touchStartX;
+      if (Math.abs(diff) > 45) {
+        populateLightbox(diff > 0 ? currentIdx - 1 : currentIdx + 1);
+      }
+    }, { passive: true });
+
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+
+    lightbox.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') populateLightbox(currentIdx - 1);
+      if (event.key === 'ArrowLeft') populateLightbox(currentIdx + 1);
+    });
   }
-}
-window.addEventListener('hashchange', checkArticleHash);
-checkArticleHash();
+
+  /* ------------------------------------------------------------------------
+     6. Magazine Category Filter & Instant Search (#articles / magazine/)
+     ------------------------------------------------------------------------ */
+  const filterButtons = [...document.querySelectorAll('.filter-chip')];
+  const searchInput = document.querySelector('#article-search-input');
+  const resetFilterBtn = document.querySelector('#reset-articles-filter');
+  const emptyState = document.querySelector('#articles-empty');
+  const articleUnits = [...document.querySelectorAll('#articles [data-category], #magazine-archive [data-category]')];
+
+  if (articleUnits.length && (filterButtons.length || searchInput)) {
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    const normalizePersian = (text) =>
+      (text || '')
+        .toLowerCase()
+        .replace(/ي/g, 'ی')
+        .replace(/ك/g, 'ک')
+        .replace(/\u200c/g, ' ')
+        .trim();
+
+    const applyArticleFilters = () => {
+      const query = normalizePersian(searchQuery);
+      let visibleCount = 0;
+
+      articleUnits.forEach((unit) => {
+        const category = unit.dataset.category || '';
+        const haystack = normalizePersian(`${unit.dataset.keywords || ''} ${unit.textContent || ''}`);
+        const matchesCategory = activeCategory === 'all' || category === activeCategory;
+        const matchesQuery = !query || haystack.includes(query);
+        const show = matchesCategory && matchesQuery;
+
+        unit.hidden = !show;
+        if (show) visibleCount += 1;
+      });
+
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+    };
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.filter || 'all';
+        filterButtons.forEach((chip) => {
+          const selected = chip === btn;
+          chip.classList.toggle('is-active', selected);
+          chip.setAttribute('aria-pressed', String(selected));
+        });
+        applyArticleFilters();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (event) => {
+        searchQuery = event.target.value || '';
+        applyArticleFilters();
+      });
+    }
+
+    if (resetFilterBtn) {
+      resetFilterBtn.addEventListener('click', () => {
+        activeCategory = 'all';
+        searchQuery = '';
+        if (searchInput) searchInput.value = '';
+        filterButtons.forEach((chip) => {
+          const isAll = chip.dataset.filter === 'all';
+          chip.classList.toggle('is-active', isAll);
+          chip.setAttribute('aria-pressed', String(isAll));
+        });
+        applyArticleFilters();
+      });
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const initialCat = params.get('category');
+    if (initialCat) {
+      const targetBtn = filterButtons.find((b) => b.dataset.filter === initialCat);
+      if (targetBtn) targetBtn.click();
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     7. Article Share / Copy Link Utility
+     ------------------------------------------------------------------------ */
+  document.querySelectorAll('[data-copy-url]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const urlToCopy = window.location.href;
+      try {
+        await navigator.clipboard.writeText(urlToCopy);
+        const original = btn.textContent;
+        btn.textContent = 'لینک صفحه کپی شد ✓';
+        setTimeout(() => { btn.textContent = original; }, 2600);
+      } catch (_) {
+        /* fallback ignored gracefully */
+      }
+    });
+  });
+
+  /* ------------------------------------------------------------------------
+     8. Three-Flow Conversion Engine (Course / Service / Consultation)
+        - Strict Persian validation + Persian digit normalization
+        - Duplicate submission guard
+        - Real fetch() if data-endpoint configured; otherwise honest local
+          request builder with 1-click Copy (zero fake server submission,
+          zero PII stored in URLs or logs)
+     ------------------------------------------------------------------------ */
+  const conversionTabs = [...document.querySelectorAll('.conversion-tab')];
+  const conversionPanels = [...document.querySelectorAll('.conversion-panel')];
+
+  const activateConversionTab = (flowId, preselectValue, preselectTier) => {
+    const applySelects = (container) => {
+      if (!container) return;
+      if (preselectValue) {
+        const selectEl = container.querySelector('select[name="selection"]');
+        if (selectEl && [...selectEl.options].some((opt) => opt.value === preselectValue)) {
+          selectEl.value = preselectValue;
+        }
+      }
+      if (preselectTier) {
+        const tierEl = container.querySelector('select[name="metaOption"]');
+        if (tierEl && [...tierEl.options].some((opt) => opt.value === preselectTier)) {
+          tierEl.value = preselectTier;
+        }
+      }
+    };
+
+    if (!conversionTabs.length) {
+      applySelects(document.querySelector('.conversion-panel'));
+      return;
+    }
+    conversionTabs.forEach((tab) => {
+      const isSelected = tab.dataset.flowTarget === flowId;
+      tab.setAttribute('aria-selected', String(isSelected));
+    });
+    conversionPanels.forEach((panel) => {
+      const isMatch = panel.dataset.flowPanel === flowId;
+      panel.hidden = !isMatch;
+      if (isMatch) applySelects(panel);
+    });
+  };
+
+  conversionTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activateConversionTab(tab.dataset.flowTarget);
+    });
+  });
+
+  document.querySelectorAll('[data-open-flow]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const flow = trigger.dataset.openFlow;
+      const item = trigger.dataset.flowItem || '';
+      const tier = trigger.dataset.flowTier || '';
+      activateConversionTab(flow, item, tier);
+    });
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedFlow = urlParams.get('flow');
+  const requestedItem = urlParams.get('item');
+  const requestedTier = urlParams.get('tier');
+  if (requestedFlow || requestedItem || requestedTier) {
+    activateConversionTab(requestedFlow || 'course', requestedItem || '', requestedTier || '');
+  }
+
+  const toAsciiDigits = (str) =>
+    String(str || '')
+      .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 1776))
+      .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632))
+      .replace(/[\s\-()]/g, '');
+
+  const isValidPhone = (raw) => {
+    const clean = toAsciiDigits(raw);
+    return /^(\+98|0098|98|0)?9\d{9}$/.test(clean) || /^\+\d{8,15}$/.test(clean);
+  };
+
+  const submittedSignatures = new Set();
+
+  document.querySelectorAll('.hanis-conversion-form').forEach((form) => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const feedback = form.querySelector('.form-feedback');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const flowType = form.dataset.flowType || 'consultation';
+
+      const setFieldError = (field, message) => {
+        if (!field) return;
+        const wrapper = field.closest('.form-field');
+        const errEl = wrapper ? wrapper.querySelector('.field-error') : null;
+        field.setAttribute('aria-invalid', message ? 'true' : 'false');
+        if (errEl) errEl.textContent = message || '';
+      };
+
+      const nameInput = form.querySelector('[name="fullName"]');
+      const phoneInput = form.querySelector('[name="phone"]');
+      const topicSelect = form.querySelector('[name="selection"]');
+      const levelSelect = form.querySelector('[name="metaOption"]');
+      const notesInput = form.querySelector('[name="notes"]');
+
+      [nameInput, phoneInput, topicSelect].forEach((f) => setFieldError(f, ''));
+      if (feedback) {
+        feedback.hidden = true;
+        feedback.className = 'form-feedback';
+        feedback.textContent = '';
+      }
+
+      let hasError = false;
+      const fullName = (nameInput?.value || '').trim();
+      const rawPhone = (phoneInput?.value || '').trim();
+      const selectedOptionText = topicSelect?.selectedOptions?.[0]?.textContent?.trim() || '';
+      const selectedValue = topicSelect?.value || '';
+      const metaText = levelSelect?.selectedOptions?.[0]?.textContent?.trim() || '';
+      const notes = (notesInput?.value || '').trim();
+
+      if (fullName.length < 3) {
+        setFieldError(nameInput, 'لطفاً نام و نام خانوادگی خود را به‌صورت کامل وارد نمایید.');
+        hasError = true;
+      }
+      if (!isValidPhone(rawPhone)) {
+        setFieldError(phoneInput, 'لطفاً شماره موبایل معتبر (مانند ۰۹۱۲xxxxxxx یا با پیش‌شماره کشور) وارد نمایید.');
+        hasError = true;
+      }
+      if (!selectedValue) {
+        setFieldError(topicSelect, 'لطفاً یکی از گزینه‌های تخصصی این بخش را انتخاب نمایید.');
+        hasError = true;
+      }
+
+      if (hasError) {
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        firstInvalid?.focus();
+        return;
+      }
+
+      const signature = `${flowType}|${fullName}|${toAsciiDigits(rawPhone)}|${selectedValue}|${notes}`;
+      if (submittedSignatures.has(signature)) {
+        if (feedback) {
+          feedback.hidden = false;
+          feedback.classList.add('is-error');
+          feedback.innerHTML = '<strong>این درخواست پیش‌تر آماده شده است</strong><p>برای جلوگیری از ثبت تکراری، همان کد و متن درخواست قبلی شما معتبر است.</p>';
+        }
+        return;
+      }
+
+      const flowLabels = {
+        course: 'پیش‌ثبت‌نام و مشاوره دوره آموزشی',
+        service: 'درخواست هماهنگی نوبت خدمات زیبایی',
+        consultation: 'درخواست مشاوره تخصصی آکادمی هانیس'
+      };
+      const endpoint = (form.dataset.endpoint || '').trim();
+      const originalBtnLabel = submitBtn ? submitBtn.textContent : '';
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'در حال بررسی اطلاعات...';
+      }
+
+      if (endpoint) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
+              flow: flowLabels[flowType] || flowType,
+              fullName,
+              phone: toAsciiDigits(rawPhone),
+              selection: selectedOptionText,
+              detail: metaText,
+              notes
+            })
+          });
+
+          if (!response.ok) throw new Error('endpoint_error');
+          submittedSignatures.add(signature);
+          form.reset();
+
+          if (feedback) {
+            feedback.hidden = false;
+            feedback.classList.add('is-success');
+            feedback.innerHTML = '<strong>درخواست شما با موفقیت ثبت شد</strong><p>واحد هماهنگی آکادمی زیبایی هانیس پس از بررسی ظرفیت، با شماره تماس شما ارتباط خواهد گرفت.</p>';
+          }
+        } catch (_) {
+          if (feedback) {
+            feedback.hidden = false;
+            feedback.classList.add('is-error');
+            feedback.innerHTML = '<strong>خطا در ارتباط با سرور پذیرش</strong><p>در حال حاضر امکان ارسال برخط وجود ندارد. لطفاً دقایقی دیگر تلاش نمایید.</p>';
+          }
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnLabel;
+          }
+        }
+        return;
+      }
+
+      /* Truthful Static Mode: Never pretend data was sent to a server when no
+         backend endpoint is configured. Prepare a clean structured summary for
+         direct handoff without exposing PII in URLs or logs. */
+      submittedSignatures.add(signature);
+      const summaryLines = [
+        `آکادمی زیبایی هانیس — ${flowLabels[flowType] || 'فرم درخواست'}`,
+        `نام متقاضی: ${fullName}`,
+        `شماره تماس: ${rawPhone}`,
+        `موضوع انتخابی: ${selectedOptionText}`,
+        metaText ? `جزئیات تکمیلی: ${metaText}` : '',
+        notes ? `توضیحات: ${notes}` : ''
+      ].filter(Boolean).join('\n');
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnLabel;
+      }
+
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.innerHTML = '';
+
+        const titleEl = document.createElement('strong');
+        titleEl.textContent = 'خلاصه استاندارد درخواست شما آماده شد (نسخه ایستا بدون ذخیره روی سرور عمومی)';
+
+        const descEl = document.createElement('p');
+        descEl.textContent =
+          'جهت حفاظت کامل از حریم خصوصی شما و شفافیت فنی، این پورتال ایستا اطلاعات شخصی را در مرورگر یا سرور واسط ذخیره نمی‌کند. متن استاندارد زیر آماده کپی و ارسال مستقیم به واحد پذیرش آکادمی زیبایی هانیس است:';
+
+        const preBox = document.createElement('div');
+        preBox.className = 'prepared-request-box';
+        preBox.textContent = summaryLines;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'button gold';
+        copyBtn.textContent = 'کپی متن درخواست آماده ارسال';
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(summaryLines);
+            copyBtn.textContent = 'متن درخواست در حافظه کپی شد ✓';
+          } catch (_) {
+            copyBtn.textContent = 'لطفاً متن بالا را انتخاب و کپی نمایید';
+          }
+        });
+
+        feedback.append(titleEl, descEl, preBox, copyBtn);
+      }
+    });
+  });
+})();
