@@ -1,50 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Replace https://example.com with your final production domain upon deployment -->
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
-    <loc>https://example.com/</loc>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-
     <image:image>
-      <image:loc>https://example.com/assets/courses-poster.jpg</image:loc>
-      <image:title>دنیای آموزش آکادمی زیبایی هانیس؛ دوره‌های میکاپ، ناخن و مو</image:title>
+      <image:loc>https://rahmaniho.github.io/Academy_Hanis/assets/hero.jpg</image:loc>
+      <image:title>آکادمی زیبایی هانیس</image:title>
     </image:image>
-    <image:image>
-      <image:loc>https://example.com/assets/articles-poster.jpg</image:loc>
-      <image:title>آموزش تخصصی طراحی ناخن لوکس در آکادمی زیبایی هانیس</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://example.com/assets/article-makeup.jpg</image:loc>
-      <image:title>رازهای ماندگاری میکاپ حرفه‌ای و عروس در آکادمی زیبایی هانیس</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://example.com/assets/article-hair.jpg</image:loc>
-      <image:title>راهنمای جامع احیا، پروتئین‌تراپی و رنگ و لایت مو</image:title>
-    </image:image>
-
     <video:video>
-      <video:thumbnail_loc>https://example.com/assets/courses-poster.jpg</video:thumbnail_loc>
-      <video:title>دنیای آموزش آکادمی زیبایی هانیس؛ مسیر حرفه‌ای هنر و استایل</video:title>
-      <video:description>نمای ویدیویی بخش دنیای آموزش هانیس با معرفی دوره‌های تخصصی هنر میکاپ حرفه‌ای، دنیای تخصصی ناخن و زیبایی و هنر مو.</video:description>
-      <video:content_loc>https://example.com/assets/InShot_20261031_000257060.mp4</video:content_loc>
-      <video:duration>19</video:duration>
-      <video:publication_date>2026-10-31T00:02:57+03:30</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
+      <video:thumbnail_loc>https://rahmaniho.github.io/Academy_Hanis/assets/courses-poster.jpg</video:thumbnail_loc>
+      <video:title>دنیای آموزش تخصصی آکادمی زیبایی هانیس</video:title>
+      <video:description>نمای بصری بخش دوره‌های آموزشی میکاپ، طراحی ناخن و رنگ و شینیون مو در آکادمی زیبایی هانیس.</video:description>
+      <video:content_loc>https://rahmaniho.github.io/Academy_Hanis/assets/InShot_20261031_000257060.mp4</video:content_loc>
+      <video:duration>9</video:duration>
     </video:video>
-
     <video:video>
-      <video:thumbnail_loc>https://example.com/assets/articles-poster.jpg</video:thumbnail_loc>
-      <video:title>آموزش اصول طراحی ناخن لوکس، فرمینگ بادامی و لاین‌آرت طلایی در آکادمی زیبایی هانیس</video:title>
-      <video:description>ویدیوی آموزشی اختصاصی آکادمی زیبایی هانیس درباره اجرای فرم بادامی متقارن، لاک‌ژل قرمز یاقوتی و تکنیک لاین‌آرت موجی سفید و گلیتر طلایی همراه با نکات مانیکور روسی و تاپ‌کوت آینه‌ای.</video:description>
-      <video:content_loc>https://example.com/assets/InShot_20261030_230402144.mp4</video:content_loc>
-      <video:duration>5</video:duration>
-      <video:publication_date>2026-10-30T23:04:02+03:30</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
+      <video:thumbnail_loc>https://rahmaniho.github.io/Academy_Hanis/assets/articles-poster.jpg</video:thumbnail_loc>
+      <video:title>مجله تخصصی زیبایی هانیس</video:title>
+      <video:description>نمای بصری بخش مقالات و راهنماهای تخصصی مراقبت و زیبایی آکادمی هانیس.</video:description>
+      <video:content_loc>https://rahmaniho.github.io/Academy_Hanis/assets/InShot_20261030_230402144.mp4</video:content_loc>
+      <video:duration>9</video:duration>
     </video:video>
+  </url>
+
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/courses/makeup/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/courses/nail-art/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/courses/hair-beauty/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/services/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/portfolio/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/luxury-nail-art/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/velvet-skin-makeup/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/hair-color-revival/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/nail-structure-care/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rahmaniho.github.io/Academy_Hanis/magazine/beauty-career-roadmap/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

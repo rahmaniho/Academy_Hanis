@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Replace https://example.com with your production domain before launch
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://rahmaniho.github.io/Academy_Hanis/sitemap.xml
