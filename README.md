@@ -1,47 +1,14 @@
-# آکادمی زیبایی هانیس | HANIS Beauty Academy
+# Hanis Beauty Academy
 
-پلتفرم دیجیتال رسمی **آکادمی زیبایی هانیس**؛ سامانه یکپارچه و تفکیک‌شده برای **آموزش تخصصی هنرهای زیبایی**، **خدمات اختصاصی سالن زیبایی** و **مجله تحلیلی زیبایی هانیس** با معماری ایستای سبک، راست‌به‌چپ (RTL) و سازگار با GitHub Pages.
+A responsive Persian landing page and SEO-ready editorial journal for Hanis Beauty Academy. Run locally with `python3 -m http.server 8000 --bind 0.0.0.0` and open the site in a browser.
 
-- **آدرس انتشار رسمی (GitHub Pages):** `https://rahmaniho.github.io/Academy_Hanis/`
+The consultation form is a front-end prototype and does not transmit or store submissions. Connect it to an approved backend or contact channel before launch. Course, service, and editorial descriptions should be reviewed before production, and placeholder domain URLs in `sitemap.xml` and `robots.txt` should be updated to the final production domain.
 
----
+## Hero video
+The hero uses the supplied local `assets/InShot_20261030_223328747.mp4`. Scrolling scrubs the muted video and reveals the title sequence. The local poster is displayed if the video cannot load or the visitor prefers reduced motion. Before publishing, confirm that the supplied video and its contents are licensed for use.
 
-## معماری صفحات و مسیرهای کاربری (Information Architecture)
+## Courses ambient video (`#courses`)
+The courses section ("دنیای آموزش هانیس", `#courses`) plays `assets/InShot_20261031_000257060.mp4` (`1280x720` with local poster `assets/courses-poster.jpg`) as a smooth 35%-opacity (`opacity: 0.35`, `playbackRate: 0.8`) sticky ambient background layer with soft top/bottom edge feathering.
 
-| مسیر | عنوان و کاربرد | مخاطب هدف |
-|---|---|---|
-| `index.html` | صفحه اصلی پرچم‌دار با تفکیک ۳ مسیر کاربری، ویدیوهای محیطی و سامانه ۳ زبانه پذیرش | همه مخاطبان |
-| `courses/makeup/index.html` | صفحه اختصاصی سرفصل و پیش‌ثبت‌نام دوره میکاپ تخصصی چهره | هنرجویان |
-| `courses/nail-art/index.html` | صفحه اختصاصی سرفصل و پیش‌ثبت‌نام دوره طراحی و کاشت ناخن | هنرجویان |
-| `courses/hair-beauty/index.html` | صفحه اختصاصی سرفصل و پیش‌ثبت‌نام دوره رنگ، لایت و شینیون مو | هنرجویان |
-| `services/index.html` | منوی کامل خدمات تخصصی سالن، نکات پیش از مراجعه و فرم نوبت‌دهی | مراجعان خدمات زیبایی |
-| `portfolio/index.html` | گالری نمونه‌کارهای قابل فیلتر در ۷ دسته‌بندی به همراه لایت‌باکس دسترس‌پذیر | هنرجویان و مراجعان |
-| `magazine/index.html` | هاب مستقل مجله زیبایی هانیس با جستجوی آنی و فیلتر موضوعی | مخاطبان مجله و سئو |
-| `magazine/*/index.html` | ۵ صفحه اختصاصی مقالات آموزشی با فهرست مطالب (TOC)، اسکیما و مقالات مرتبط | مخاطبان مجله و سئو |
-
----
-
-## ویژگی‌های کلیدی فنی و بصری
-
-- **حفظ کامل دارایی‌های ویدیویی و هویت برند هانیس:**
-  - ویدیوی تعاملی اسکرول در بخش هیرو (`#home` — `assets/InShot_20261030_223328747.mp4`)
-  - ویدیوی محیطی ملایم با شفافیت ۳۵٪ در پس‌زمینه بخش آموزش (`#courses` — `assets/InShot_20261031_000257060.mp4`) با بارگذاری هوشمند (`IntersectionObserver`)
-  - ویدیوی آرام با شفافیت ۳۰٪ در پس‌زمینه بخش مجله (`#articles` — `assets/InShot_20261030_230402144.mp4`) با بارگذاری هوشمند (`IntersectionObserver`)
-- **بهینه‌سازی عملکرد و تصاویر نسل جدید:** نسخه‌های کم‌حجم `.webp` در کنار نسخه‌های پشتیبان `.jpg`/`.png` داخل تگ `<picture>` با کاهش چشمگیر حجم صفحه اصلی.
-- **سامانه پذیرش صادقانه و ایمن (۳ مسیر مجزا):**
-  - تفکیک کامل «ثبت‌نام دوره آموزشی»، «نوبت‌دهی خدمات زیبایی» و «درخواست مشاوره تخصصی».
-  - اعتبارسنجی فارسی، پشتیبانی خودکار از ارقام فارسی و انگلیسی موبایل، جلوگیری از ارسال تکراری و عدم ذخیره‌سازی اطلاعات شخصی در URL یا لاگ مرورگر.
-  - قابلیت اتصال مستقیم به وب‌هوک/سرور واقعی از طریق ویژگی `data-endpoint=""` روی تگ `<form class="hanis-conversion-form">`.
-- **سئوی تکنیکال کامل:** نقشه سایت `sitemap.xml`، فایل `robots.txt`، تگ‌های Canonical، متادیتای OpenGraph / Twitter و داده‌های ساختاریافته Schema.org (`EducationalOrganization`, `BeautySalon`, `Course`, `BlogPosting`, `FAQPage`, `BreadcrumbList`).
-
----
-
-## اجرای محلی
-
-نیازی به هیچ ابزار بیلد یا وابستگی خارجی نیست:
-
-```bash
-python3 -m http.server 8000
-```
-
-سپس در مرورگر آدرس `http://localhost:8000` را باز کنید.
+## Editorial articles & ambient video background (`#articles`)
+The articles section (`#articles`) plays `assets/InShot_20261030_230402144.mp4` (`720x1280` with local poster `assets/articles-poster.jpg`) as a soft, calm 30%-opacity (`opacity: 0.3`, `playbackRate: 0.6`) ambient background behind 5 semantic Persian beauty guides (`BlogPosting` microdata + Schema.org JSON-LD `@graph` with `VideoObject`, `Blog`, `FAQPage`, and `BreadcrumbList`), category filtering, Persian-normalized instant search, deep-linkable reader URLs (`#article-...`), and `sitemap.xml` video indexing.
