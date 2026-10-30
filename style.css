@@ -18,6 +18,67 @@ footer a:hover{color:var(--gold)}
 .footer-end{text-align:left;font:12px 'Marcellus';letter-spacing:3px;color:#c4a678;line-height:2}.footer-end span{font:8px 'DM Sans';letter-spacing:2px;color:#70685e}.copyright{grid-column:1/-1;border-top:1px solid #ffffff19;padding-top:22px;font-size:10px;color:#756e64;display:flex;justify-content:space-between}.copyright span{font:8px 'DM Sans';letter-spacing:2px}
 
 /* =====================================================================
+   Courses Section ("دنیای آموزش هانیس") + 35% Ambient Background Video
+   ===================================================================== */
+.courses{
+  background:#11100e;
+  position:relative;
+  overflow:clip;
+}
+.courses-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+.courses-bg-sticky{
+  position:sticky;
+  top:0;
+  width:100%;
+  height:100vh;
+  height:100svh;
+  overflow:hidden;
+  background:#11100e;
+}
+.courses-bg-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  opacity:.35;
+  filter:saturate(.82) sepia(.1) blur(.3px);
+  transform:scale(1.04);
+  animation:coursesAmbientDrift 22s ease-in-out infinite alternate;
+  will-change:transform;
+}
+@keyframes coursesAmbientDrift{
+  0%{transform:scale(1.03) translate3d(0,-.8%,0)}
+  100%{transform:scale(1.08) translate3d(-1%,.8%,0)}
+}
+.courses-bg-fade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,#1b1916 0%,rgba(17,16,14,0) 14%,rgba(17,16,14,0) 86%,#1a1815 100%);
+}
+.courses-inner{
+  position:relative;
+  z-index:1;
+}
+.courses .section-top h2,.courses .course-card h3{
+  text-shadow:0 2px 16px rgba(0,0,0,.65);
+}
+.courses .section-top p{color:#c0b5a6}
+.courses .course-card p{color:#b0a699}
+.courses .card-meta{color:#c6a678}
+.courses .course-card>a{
+  background:rgba(18,15,13,.62);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  border-color:#8b7557;
+}
+
+/* =====================================================================
    Editorial Articles Section (#articles) + 30% Ambient Background Video
    ===================================================================== */
 .articles{
@@ -646,7 +707,7 @@ footer a:hover{color:var(--gold)}
 }
 
 /* Scroll-driven cinematic hero: the poster remains visible until the video is ready. */
-.hero-scroll-track{height:220vh;position:relative}.hero-scroll-track .hero{position:sticky;top:0;height:100vh;min-height:0}.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.65) sepia(.18);opacity:0;transition:opacity .6s}.hero-video.is-ready{opacity:1}.hero-shade{z-index:1;pointer-events:none}.hero-content,.hero-side,.hero-index,.hero-scroll,.hero-mark{z-index:2}.hero-scroll i{height:35px;background:linear-gradient(to bottom,var(--gold) calc(var(--progress, 0) * 100%),#b79a7155 0)}@media(max-width:800px){.hero-scroll-track{height:180vh}.hero-scroll-track .hero{height:100svh;min-height:600px}.hero-video{object-position:35% center;opacity:0}.hero-video.is-ready{opacity:.7}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-scroll-track{height:auto}.hero-scroll-track .hero{position:relative;height:790px}.hero-video{display:none}.hero-scroll{display:none}.articles-bg-video{animation:none;transform:none}.card-image>img,.article-card-media>img,.article-card,.button{transition:none}}
+.hero-scroll-track{height:220vh;position:relative}.hero-scroll-track .hero{position:sticky;top:0;height:100vh;min-height:0}.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.65) sepia(.18);opacity:0;transition:opacity .6s}.hero-video.is-ready{opacity:1}.hero-shade{z-index:1;pointer-events:none}.hero-content,.hero-side,.hero-index,.hero-scroll,.hero-mark{z-index:2}.hero-scroll i{height:35px;background:linear-gradient(to bottom,var(--gold) calc(var(--progress, 0) * 100%),#b79a7155 0)}@media(max-width:800px){.hero-scroll-track{height:180vh}.hero-scroll-track .hero{height:100svh;min-height:600px}.hero-video{object-position:35% center;opacity:0}.hero-video.is-ready{opacity:.7}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-scroll-track{height:auto}.hero-scroll-track .hero{position:relative;height:790px}.hero-video{display:none}.hero-scroll{display:none}.courses-bg-video,.articles-bg-video{animation:none;transform:none}.card-image>img,.article-card-media>img,.article-card,.button{transition:none}}
 
 /* A cinematic camera move and title sequence tied to the same scroll timeline. */
 .hero-scroll-track{height:320vh}

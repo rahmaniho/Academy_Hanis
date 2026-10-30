@@ -131,54 +131,57 @@ function updateActiveNav() {
 window.addEventListener('scroll', updateActiveNav, { passive: true });
 
 // =========================================================================
-// 3. Soft & Calm Ambient Background Video in #articles (30% opacity)
+// 3. Ambient Background Videos (#courses at 35% & #articles at 30% opacity)
 // =========================================================================
-const articlesSection = document.querySelector('#articles');
-const articlesBgVideo = document.querySelector('#articles-bg-video');
-const CALM_PLAYBACK_RATE = 0.6;
+function initAmbientSectionVideo(sectionSelector, videoSelector, playbackRate) {
+  const sectionEl = document.querySelector(sectionSelector);
+  const videoEl = document.querySelector(videoSelector);
+  if (!sectionEl || !videoEl) return;
 
-if (articlesBgVideo && articlesSection) {
-  const applyCalmRate = () => {
+  const applyRate = () => {
     try {
-      articlesBgVideo.defaultPlaybackRate = CALM_PLAYBACK_RATE;
-      articlesBgVideo.playbackRate = CALM_PLAYBACK_RATE;
+      videoEl.defaultPlaybackRate = playbackRate;
+      videoEl.playbackRate = playbackRate;
     } catch (_) { /* Fallback to normal rate if unsupported */ }
   };
 
-  articlesBgVideo.addEventListener('loadedmetadata', applyCalmRate);
-  articlesBgVideo.addEventListener('play', applyCalmRate);
-  applyCalmRate();
+  videoEl.addEventListener('loadedmetadata', applyRate);
+  videoEl.addEventListener('play', applyRate);
+  applyRate();
 
-  const syncArticlesBgPlayback = inView => {
+  let sectionInView = false;
+  const syncPlayback = inView => {
     if (reduceMotion.matches) {
-      articlesBgVideo.pause();
+      videoEl.pause();
       return;
     }
     if (inView) {
-      applyCalmRate();
-      articlesBgVideo.play().catch(() => {});
-    } else if (!articlesBgVideo.paused) {
-      articlesBgVideo.pause();
+      applyRate();
+      videoEl.play().catch(() => {});
+    } else if (!videoEl.paused) {
+      videoEl.pause();
     }
   };
 
-  let sectionInView = false;
   if ('IntersectionObserver' in window) {
-    const bgObserver = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         sectionInView = entry.isIntersecting;
-        syncArticlesBgPlayback(sectionInView);
+        syncPlayback(sectionInView);
       });
     }, { rootMargin: '250px 0px', threshold: 0.01 });
-    bgObserver.observe(articlesSection);
+    observer.observe(sectionEl);
   } else {
-    syncArticlesBgPlayback(true);
+    syncPlayback(true);
   }
 
-  const onMotionPrefChange = () => syncArticlesBgPlayback(sectionInView);
+  const onMotionPrefChange = () => syncPlayback(sectionInView);
   if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onMotionPrefChange);
   else reduceMotion.addListener(onMotionPrefChange);
 }
+
+initAmbientSectionVideo('#courses', '#courses-bg-video', 0.8);
+initAmbientSectionVideo('#articles', '#articles-bg-video', 0.6);
 
 // =========================================================================
 // 4. Articles Category Filtering & Persian-Normalized Instant Search
