@@ -74,6 +74,20 @@
       },
       {
         "@type": "VideoObject",
+        "@id": "#courses-featured-video",
+        "name": "دنیای آموزش آکادمی زیبایی هانیس؛ مسیر حرفه‌ای هنر و استایل",
+        "description": "نمای ویدیویی بخش دنیای آموزش هانیس با معرفی دوره‌های تخصصی هنر میکاپ حرفه‌ای، دنیای تخصصی ناخن و زیبایی و هنر مو.",
+        "thumbnailUrl": ["assets/courses-poster.jpg"],
+        "contentUrl": "assets/InShot_20261031_000257060.mp4",
+        "uploadDate": "2026-10-31T00:02:57+03:30",
+        "duration": "PT19S",
+        "width": 1280,
+        "height": 720,
+        "inLanguage": "fa-IR",
+        "publisher": { "@id": "#organization" }
+      },
+      {
+        "@type": "VideoObject",
         "@id": "#articles-featured-video",
         "name": "نمای تخصصی طراحی ناخن لوکس، فرمینگ بادامی و لاین‌آرت طلایی در آکادمی زیبایی هانیس",
         "description": "ویدیوی تخصصی نمایش اجرای فرم بادامی متقارن، لاک‌ژل قرمز یاقوتی و تکنیک لاین‌آرت موجی سفید و گلیتر طلایی در بخش مقالات آکادمی زیبایی هانیس.",
@@ -293,48 +307,70 @@
     </section>
 
     <section class="courses section" id="courses">
-      <div class="section-top">
-        <div>
-          <div class="eyebrow"><span></span> دنیای آموزش هانیس</div>
-          <h2>آینده‌ات را <em>زیبا بساز</em></h2>
-          <p>هر هنری با یک قدم آغاز می‌شود؛ قدم اول تو از اینجاست.</p>
+      <!-- Ambient 35% Opacity Background Video for Courses ("دنیای آموزش هانیس") -->
+      <div class="courses-bg" aria-hidden="true">
+        <div class="courses-bg-sticky">
+          <video
+            class="courses-bg-video"
+            id="courses-bg-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="assets/courses-poster.jpg"
+            width="1280"
+            height="720">
+            <source src="assets/InShot_20261031_000257060.mp4" type="video/mp4">
+          </video>
+          <div class="courses-bg-fade"></div>
         </div>
-        <a href="#course-grid" class="text-link">مشاهده دوره‌ها <span>←</span></a>
       </div>
-      <div class="course-grid" id="course-grid">
-        <article class="course-card">
-          <div class="card-image">
-            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=900&q=85" alt="آموزش هنر میکاپ حرفه‌ای در آکادمی زیبایی هانیس" loading="lazy">
-            <span class="tag">BEAUTY ARTISTRY</span>
-            <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
+
+      <div class="courses-inner">
+        <div class="section-top">
+          <div>
+            <div class="eyebrow"><span></span> دنیای آموزش هانیس</div>
+            <h2>آینده‌ات را <em>زیبا بساز</em></h2>
+            <p>هر هنری با یک قدم آغاز می‌شود؛ قدم اول تو از اینجاست.</p>
           </div>
-          <div class="card-meta"><span>01 / MAKEUP</span><span>✦</span></div>
-          <h3>هنر میکاپ حرفه‌ای</h3>
-          <p>زیبایی را با دستان خودت خلق کن.</p>
-          <a href="#contact" aria-label="مشاوره دوره میکاپ">↖</a>
-        </article>
-        <article class="course-card">
-          <div class="card-image">
-            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=85" alt="آموزش تخصصی طراحی و کاشت ناخن در آکادمی هانیس" loading="lazy">
-            <span class="tag">NAIL ACADEMY</span>
-            <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
-          </div>
-          <div class="card-meta"><span>02 / NAIL ART</span><span>✦</span></div>
-          <h3>دنیای تخصصی ناخن</h3>
-          <p>ظرافت، خلاقیت و مهارت در کنار هم.</p>
-          <a href="#contact" aria-label="مشاوره دوره ناخن">↖</a>
-        </article>
-        <article class="course-card">
-          <div class="card-image">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85" alt="آموزش رنگ، لایت و استایل تخصصی مو در آکادمی هانیس" loading="lazy">
-            <span class="tag">HAIR &amp; BEAUTY</span>
-            <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
-          </div>
-          <div class="card-meta"><span>03 / HAIR</span><span>✦</span></div>
-          <h3>زیبایی و هنر مو</h3>
-          <p>تکنیک را بیاموز، سبک خودت را بساز.</p>
-          <a href="#contact" aria-label="مشاوره دوره مو">↖</a>
-        </article>
+          <a href="#course-grid" class="text-link">مشاهده دوره‌ها <span>←</span></a>
+        </div>
+        <div class="course-grid" id="course-grid">
+          <article class="course-card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=900&q=85" alt="آموزش هنر میکاپ حرفه‌ای در آکادمی زیبایی هانیس" loading="lazy">
+              <span class="tag">BEAUTY ARTISTRY</span>
+              <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
+            </div>
+            <div class="card-meta"><span>01 / MAKEUP</span><span>✦</span></div>
+            <h3>هنر میکاپ حرفه‌ای</h3>
+            <p>زیبایی را با دستان خودت خلق کن.</p>
+            <a href="#contact" aria-label="مشاوره دوره میکاپ">↖</a>
+          </article>
+          <article class="course-card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=85" alt="آموزش تخصصی طراحی و کاشت ناخن در آکادمی هانیس" loading="lazy">
+              <span class="tag">NAIL ACADEMY</span>
+              <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
+            </div>
+            <div class="card-meta"><span>02 / NAIL ART</span><span>✦</span></div>
+            <h3>دنیای تخصصی ناخن</h3>
+            <p>ظرافت، خلاقیت و مهارت در کنار هم.</p>
+            <a href="#contact" aria-label="مشاوره دوره ناخن">↖</a>
+          </article>
+          <article class="course-card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85" alt="آموزش رنگ، لایت و استایل تخصصی مو در آکادمی هانیس" loading="lazy">
+              <span class="tag">HAIR &amp; BEAUTY</span>
+              <div class="watermark"><img src="assets/logo.png" alt="" width="62" height="62" loading="lazy"></div>
+            </div>
+            <div class="card-meta"><span>03 / HAIR</span><span>✦</span></div>
+            <h3>زیبایی و هنر مو</h3>
+            <p>تکنیک را بیاموز، سبک خودت را بساز.</p>
+            <a href="#contact" aria-label="مشاوره دوره مو">↖</a>
+          </article>
+        </div>
       </div>
     </section>
 

@@ -6,10 +6,14 @@
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://example.com/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
+    <image:image>
+      <image:loc>https://example.com/assets/courses-poster.jpg</image:loc>
+      <image:title>دنیای آموزش آکادمی زیبایی هانیس؛ دوره‌های میکاپ، ناخن و مو</image:title>
+    </image:image>
     <image:image>
       <image:loc>https://example.com/assets/articles-poster.jpg</image:loc>
       <image:title>آموزش تخصصی طراحی ناخن لوکس در آکادمی زیبایی هانیس</image:title>
@@ -22,6 +26,16 @@
       <image:loc>https://example.com/assets/article-hair.jpg</image:loc>
       <image:title>راهنمای جامع احیا، پروتئین‌تراپی و رنگ و لایت مو</image:title>
     </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://example.com/assets/courses-poster.jpg</video:thumbnail_loc>
+      <video:title>دنیای آموزش آکادمی زیبایی هانیس؛ مسیر حرفه‌ای هنر و استایل</video:title>
+      <video:description>نمای ویدیویی بخش دنیای آموزش هانیس با معرفی دوره‌های تخصصی هنر میکاپ حرفه‌ای، دنیای تخصصی ناخن و زیبایی و هنر مو.</video:description>
+      <video:content_loc>https://example.com/assets/InShot_20261031_000257060.mp4</video:content_loc>
+      <video:duration>19</video:duration>
+      <video:publication_date>2026-10-31T00:02:57+03:30</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
 
     <video:video>
       <video:thumbnail_loc>https://example.com/assets/articles-poster.jpg</video:thumbnail_loc>
