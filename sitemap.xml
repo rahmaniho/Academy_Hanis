@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Replace https://example.com with your final production domain upon deployment -->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+
+    <image:image>
+      <image:loc>https://example.com/assets/articles-poster.jpg</image:loc>
+      <image:title>آموزش تخصصی طراحی ناخن لوکس در آکادمی زیبایی هانیس</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://example.com/assets/article-makeup.jpg</image:loc>
+      <image:title>رازهای ماندگاری میکاپ حرفه‌ای و عروس در آکادمی زیبایی هانیس</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://example.com/assets/article-hair.jpg</image:loc>
+      <image:title>راهنمای جامع احیا، پروتئین‌تراپی و رنگ و لایت مو</image:title>
+    </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://example.com/assets/articles-poster.jpg</video:thumbnail_loc>
+      <video:title>آموزش اصول طراحی ناخن لوکس، فرمینگ بادامی و لاین‌آرت طلایی در آکادمی زیبایی هانیس</video:title>
+      <video:description>ویدیوی آموزشی اختصاصی آکادمی زیبایی هانیس درباره اجرای فرم بادامی متقارن، لاک‌ژل قرمز یاقوتی و تکنیک لاین‌آرت موجی سفید و گلیتر طلایی همراه با نکات مانیکور روسی و تاپ‌کوت آینه‌ای.</video:description>
+      <video:content_loc>https://example.com/assets/InShot_20261030_230402144.mp4</video:content_loc>
+      <video:duration>5</video:duration>
+      <video:publication_date>2026-10-30T23:04:02+03:30</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+</urlset>
