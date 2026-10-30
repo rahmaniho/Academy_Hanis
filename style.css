@@ -15,3 +15,15 @@
 @media(max-width:800px){.hero-scroll-track{height:280vh}.hero-content{top:22%}.hero-titles{min-height:245px}.hero-title h1,.hero-title h2{font-size:clamp(32px,8vw,48px)}.hero-bottom{margin-top:40px}}
 @media(max-width:480px){.hero-titles{min-height:235px}.hero-title h1,.hero-title h2{font-size:32px}.hero-title p{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.hero-scroll-track{height:auto}.hero-video,.hero-photo{transform:none}.hero-title{transition:none}.hero-titles{min-height:0}.hero-scroll-track .hero{height:auto;min-height:720px}}
+
+/* Titles open and close with the scroll, rather than running on a timer. */
+.hero-scroll-track{height:360vh}
+.hero-scroll-track .hero{height:100svh}
+.hero-video,.hero-photo{transform:translate(var(--hero-pan-x,3%),var(--hero-pan-y,-1%)) scale(var(--hero-scale,1.08))}
+.hero-title{visibility:visible;opacity:var(--reveal,0);transform:translateY(calc((1 - var(--reveal,0)) * 24px));clip-path:inset(0 calc((1 - var(--reveal,0)) * 20%) 0 0);transition:none}
+.hero-title.is-active{opacity:var(--reveal,1);transform:translateY(calc((1 - var(--reveal,1)) * 24px))}
+.hero-title h1,.hero-title h2{text-shadow:0 3px 28px #000a}
+.hero-title p{text-shadow:0 2px 15px #000}
+@media(max-width:800px){.hero-scroll-track{height:310vh}.hero-scroll-track .hero{height:100svh;min-height:0}.hero-content{top:clamp(90px,20vh,175px)}.hero-bottom{margin-top:25px}}
+@media(max-height:650px){.hero-content{top:90px}.hero-titles{min-height:210px}.hero-title h1,.hero-title h2{font-size:clamp(28px,4vw,45px);margin:8px 0;line-height:1.5}.hero-bottom{display:none}.hero-buttons{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){.hero-scroll-track{height:auto}.hero-scroll-track .hero{height:auto;min-height:720px}.hero-title{clip-path:none;transform:none}.hero-title.is-active{transform:none}.hero-video,.hero-photo{transform:none}}
