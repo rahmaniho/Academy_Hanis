@@ -131,75 +131,53 @@ function updateActiveNav() {
 window.addEventListener('scroll', updateActiveNav, { passive: true });
 
 // =========================================================================
-// 3. Articles Section Video Player (assets/InShot_20261030_230402144.mp4)
+// 3. Soft & Calm Ambient Background Video in #articles (30% opacity)
 // =========================================================================
-const articlesVideo = document.querySelector('#articles-video');
-const videoToggleBtn = document.querySelector('#articles-video-toggle');
-const videoBar = document.querySelector('#articles-video-bar');
-const videoTime = document.querySelector('#articles-video-time');
-let userManuallyPaused = false;
+const articlesSection = document.querySelector('#articles');
+const articlesBgVideo = document.querySelector('#articles-bg-video');
+const CALM_PLAYBACK_RATE = 0.6;
 
-function formatSeconds(sec) {
-  if (!Number.isFinite(sec) || sec < 0) return '00:05';
-  const whole = Math.max(1, Math.round(sec));
-  const mins = String(Math.floor(whole / 60)).padStart(2, '0');
-  const secs = String(whole % 60).padStart(2, '0');
-  return `${mins}:${secs}`;
-}
+if (articlesBgVideo && articlesSection) {
+  const applyCalmRate = () => {
+    try {
+      articlesBgVideo.defaultPlaybackRate = CALM_PLAYBACK_RATE;
+      articlesBgVideo.playbackRate = CALM_PLAYBACK_RATE;
+    } catch (_) { /* Fallback to normal rate if unsupported */ }
+  };
 
-function syncVideoControlUI() {
-  if (!articlesVideo || !videoToggleBtn) return;
-  const playing = !articlesVideo.paused && !articlesVideo.ended;
-  const icon = videoToggleBtn.querySelector('.video-btn-icon');
-  const label = videoToggleBtn.querySelector('.video-btn-label');
-  if (icon) icon.textContent = playing ? '❚❚' : '▶';
-  if (label) label.textContent = playing ? 'توقف ویدیو' : 'پخش ویدیو';
-  videoToggleBtn.setAttribute('aria-pressed', String(playing));
-}
+  articlesBgVideo.addEventListener('loadedmetadata', applyCalmRate);
+  articlesBgVideo.addEventListener('play', applyCalmRate);
+  applyCalmRate();
 
-if (articlesVideo) {
-  articlesVideo.addEventListener('loadedmetadata', () => {
-    if (videoTime) videoTime.textContent = formatSeconds(articlesVideo.duration);
-  });
-
-  articlesVideo.addEventListener('timeupdate', () => {
-    if (videoBar && Number.isFinite(articlesVideo.duration) && articlesVideo.duration > 0) {
-      const pct = (articlesVideo.currentTime / articlesVideo.duration) * 100;
-      videoBar.style.width = `${Math.min(100, Math.max(0, pct)).toFixed(1)}%`;
+  const syncArticlesBgPlayback = inView => {
+    if (reduceMotion.matches) {
+      articlesBgVideo.pause();
+      return;
     }
-  });
-
-  articlesVideo.addEventListener('play', syncVideoControlUI);
-  articlesVideo.addEventListener('pause', syncVideoControlUI);
-
-  const toggleArticlesPlayback = () => {
-    if (articlesVideo.paused) {
-      userManuallyPaused = false;
-      articlesVideo.play().catch(() => {});
-    } else {
-      userManuallyPaused = true;
-      articlesVideo.pause();
+    if (inView) {
+      applyCalmRate();
+      articlesBgVideo.play().catch(() => {});
+    } else if (!articlesBgVideo.paused) {
+      articlesBgVideo.pause();
     }
   };
 
-  if (videoToggleBtn) videoToggleBtn.addEventListener('click', toggleArticlesPlayback);
-  articlesVideo.addEventListener('click', toggleArticlesPlayback);
-
+  let sectionInView = false;
   if ('IntersectionObserver' in window) {
-    const videoObserver = new IntersectionObserver(entries => {
+    const bgObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!reduceMotion.matches && !userManuallyPaused) {
-            articlesVideo.play().catch(() => {});
-          }
-        } else if (!articlesVideo.paused) {
-          articlesVideo.pause();
-        }
+        sectionInView = entry.isIntersecting;
+        syncArticlesBgPlayback(sectionInView);
       });
-    }, { threshold: 0.25 });
-    videoObserver.observe(articlesVideo);
+    }, { rootMargin: '250px 0px', threshold: 0.01 });
+    bgObserver.observe(articlesSection);
+  } else {
+    syncArticlesBgPlayback(true);
   }
-  syncVideoControlUI();
+
+  const onMotionPrefChange = () => syncArticlesBgPlayback(sectionInView);
+  if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onMotionPrefChange);
+  else reduceMotion.addListener(onMotionPrefChange);
 }
 
 // =========================================================================
@@ -234,15 +212,6 @@ function applyArticleFilters() {
 
     item.hidden = !show;
     if (show) visibleCount += 1;
-
-    if (!show && item.contains(articlesVideo) && articlesVideo && !articlesVideo.paused) {
-      articlesVideo.pause();
-    } else if (show && item.contains(articlesVideo) && articlesVideo && !reduceMotion.matches && !userManuallyPaused) {
-      const rect = articlesVideo.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        articlesVideo.play().catch(() => {});
-      }
-    }
   });
 
   if (emptyState) emptyState.hidden = visibleCount > 0;
@@ -308,8 +277,6 @@ function updateReaderProgress() {
 
 function closeArticleModal(restoreHash = true) {
   if (!modal || !modal.open) return;
-  const innerVideo = modalMedia ? modalMedia.querySelector('video') : null;
-  if (innerVideo) innerVideo.pause();
   modal.close();
   document.body.style.overflow = '';
   document.title = defaultPageTitle;
@@ -344,39 +311,11 @@ function openArticleById(articleId, updateUrl = true) {
     modalDate.setAttribute('datetime', dateEl.getAttribute('datetime') || '');
   }
 
-  // Render Video or Editorial Cover inside Reader Sidebar
+  // Render Editorial Cover inside Reader Sidebar
   if (modalMedia) {
     modalMedia.innerHTML = '';
-    const videoSrc = articleEl.dataset.video;
-    const posterSrc = articleEl.dataset.poster || 'assets/articles-poster.jpg';
     const imageSrc = articleEl.dataset.image;
-
-    if (videoSrc) {
-      const wrap = document.createElement('div');
-      wrap.className = 'modal-video-wrap';
-      const v = document.createElement('video');
-      v.controls = true;
-      v.loop = true;
-      v.muted = true;
-      v.playsInline = true;
-      v.preload = 'metadata';
-      v.poster = posterSrc;
-      const source = document.createElement('source');
-      source.src = videoSrc;
-      source.type = 'video/mp4';
-      v.appendChild(source);
-      wrap.appendChild(v);
-      modalMedia.appendChild(wrap);
-
-      const cap = document.createElement('p');
-      cap.className = 'modal-media-caption';
-      cap.textContent = 'ویدیوی آموزشی اختصاصی آکادمی زیبایی هانیس — می‌توانید ویدیو را حین مطالعه متوقف یا بازپخش کنید.';
-      modalMedia.appendChild(cap);
-
-      if (!reduceMotion.matches) {
-        v.play().catch(() => {});
-      }
-    } else if (imageSrc) {
+    if (imageSrc) {
       const wrap = document.createElement('div');
       wrap.className = 'modal-image-wrap';
       const img = document.createElement('img');
