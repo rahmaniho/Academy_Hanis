@@ -277,12 +277,87 @@
   });
 
   /* ------------------------------------------------------------------------
-     5. Animated Portfolio Gallery, Beauty-Line Chapters & Lightbox Viewer
+     5. Animated Portfolio Gallery, Inline Video Reels & Lightbox Viewer
      ------------------------------------------------------------------------ */
   const portfolioChips = [...document.querySelectorAll('.portfolio-chip, [data-line-filter]')];
+  const mediaTypeChips = [...document.querySelectorAll('[data-media-filter]')];
   const portfolioItems = [...document.querySelectorAll('.portfolio-item, .gallery-work-card')];
   const lineChapters = [...document.querySelectorAll('.gallery-line-chapter')];
+  const galleryVideos = [...document.querySelectorAll('video.gallery-card-video')];
   const lightbox = document.getElementById('portfolio-lightbox');
+
+  let activeLineFilter = 'all';
+  let activeMediaFilter = 'all';
+
+  /* Lazy-load & smart viewport autoplay for inline gallery videos */
+  if (galleryVideos.length) {
+    const ensureVideoLoaded = (vid) => {
+      if (!vid.getAttribute('src') && vid.dataset.videoSrc) {
+        vid.setAttribute('src', vid.dataset.videoSrc);
+        vid.load();
+      }
+    };
+
+    const syncToggleLabel = (vid) => {
+      const card = vid.closest('.gallery-work-card');
+      const btn = card?.querySelector('.video-inline-toggle');
+      if (btn) {
+        btn.textContent = vid.paused ? '▶ پخش ویدیو' : '⏸ توقف';
+        btn.setAttribute('aria-pressed', String(!vid.paused));
+      }
+    };
+
+    document.querySelectorAll('.video-inline-toggle').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.gallery-work-card');
+        const vid = card?.querySelector('video.gallery-card-video');
+        if (!vid) return;
+        ensureVideoLoaded(vid);
+        if (vid.paused) {
+          vid.dataset.userPaused = 'false';
+          const p = vid.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        } else {
+          vid.dataset.userPaused = 'true';
+          vid.pause();
+        }
+        syncToggleLabel(vid);
+      });
+    });
+
+    galleryVideos.forEach((vid) => {
+      vid.addEventListener('play', () => syncToggleLabel(vid));
+      vid.addEventListener('pause', () => syncToggleLabel(vid));
+    });
+
+    if ('IntersectionObserver' in window) {
+      const vidObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const vid = entry.target;
+            if (entry.isIntersecting) {
+              ensureVideoLoaded(vid);
+              if (!reducedMotion.matches && !saveData && vid.dataset.userPaused !== 'true') {
+                const p = vid.play();
+                if (p && typeof p.catch === 'function') p.catch(() => {});
+              }
+            } else if (!vid.paused) {
+              vid.pause();
+            }
+          });
+        },
+        { rootMargin: '240px 0px', threshold: 0.15 }
+      );
+      galleryVideos.forEach((vid) => vidObserver.observe(vid));
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        galleryVideos.forEach((v) => { if (!v.paused) v.pause(); });
+      }
+    });
+  }
 
   const triggerCardStagger = (cards) => {
     if (reducedMotion.matches) return;
@@ -315,33 +390,58 @@
     });
   }
 
+  const applyGalleryFilters = () => {
+    const newlyVisible = [];
+    portfolioItems.forEach((item) => {
+      const cats = (item.dataset.category || '').split(/\s+/);
+      const mediaKind = item.dataset.mediaType || 'photo';
+      const matchCat = activeLineFilter === 'all' || cats.includes(activeLineFilter);
+      const matchMedia = activeMediaFilter === 'all' || mediaKind === activeMediaFilter;
+      const show = matchCat && matchMedia;
+      item.hidden = !show;
+      if (!show) {
+        const v = item.querySelector('video.gallery-card-video');
+        if (v && !v.paused) v.pause();
+      } else {
+        newlyVisible.push(item);
+      }
+    });
+
+    if (lineChapters.length) {
+      lineChapters.forEach((chapter) => {
+        const lineKey = chapter.dataset.beautyLine || '';
+        const hasVisibleCard = [...chapter.querySelectorAll('.gallery-work-card')].some((c) => !c.hidden);
+        chapter.hidden = !((activeLineFilter === 'all' || lineKey === activeLineFilter) && hasVisibleCard);
+      });
+    }
+
+    triggerCardStagger(newlyVisible);
+  };
+
   if (portfolioChips.length && (portfolioItems.length || lineChapters.length)) {
     portfolioChips.forEach((chip) => {
       chip.addEventListener('click', () => {
-        const cat = chip.dataset.portfolioFilter || chip.dataset.lineFilter || 'all';
+        activeLineFilter = chip.dataset.portfolioFilter || chip.dataset.lineFilter || 'all';
         portfolioChips.forEach((btn) => {
           const active = btn === chip;
           btn.classList.toggle('is-active', active);
           btn.setAttribute('aria-pressed', String(active));
         });
+        applyGalleryFilters();
+      });
+    });
+  }
 
-        if (lineChapters.length) {
-          lineChapters.forEach((chapter) => {
-            const lineKey = chapter.dataset.beautyLine || '';
-            chapter.hidden = !(cat === 'all' || lineKey === cat);
-          });
-          const newlyVisible = portfolioItems.filter((c) => !c.closest('[hidden]'));
-          triggerCardStagger(newlyVisible);
-        } else {
-          const newlyVisible = [];
-          portfolioItems.forEach((item) => {
-            const cats = (item.dataset.category || '').split(/\s+/);
-            const show = cat === 'all' || cats.includes(cat);
-            item.hidden = !show;
-            if (show) newlyVisible.push(item);
-          });
-          triggerCardStagger(newlyVisible);
-        }
+  if (mediaTypeChips.length && portfolioItems.length) {
+    mediaTypeChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        activeMediaFilter = chip.dataset.mediaFilter || 'all';
+        mediaTypeChips.forEach((btn) => {
+          const active = btn === chip;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', String(active));
+        });
+        applyGalleryFilters();
       });
     });
   }
@@ -367,6 +467,7 @@
 
   if (lightbox && portfolioItems.length) {
     const lbImg = document.getElementById('lightbox-image');
+    const lbVid = document.getElementById('lightbox-video');
     const lbCat = document.getElementById('lightbox-category');
     const lbTitle = document.getElementById('lightbox-title');
     const lbDesc = document.getElementById('lightbox-desc');
@@ -382,22 +483,45 @@
     let lastFocusedTrigger = null;
     let touchStartX = 0;
 
+    const stopLightboxVideo = () => {
+      if (lbVid) {
+        lbVid.pause();
+        lbVid.removeAttribute('src');
+        lbVid.load();
+        lbVid.hidden = true;
+      }
+    };
+
     const populateLightbox = (idx) => {
       if (!visibleTriggers.length) return;
       currentIdx = (idx + visibleTriggers.length) % visibleTriggers.length;
       const trigger = visibleTriggers[currentIdx];
+      const videoUrl = trigger.dataset.video || '';
 
-      if (lbImg) {
-        lbImg.classList.add('is-switching');
-        const nextSrc = trigger.dataset.full || trigger.querySelector('img')?.currentSrc || '';
-        const applyImg = () => {
-          lbImg.src = nextSrc;
-          lbImg.alt = trigger.dataset.title || '';
-          requestAnimationFrame(() => lbImg.classList.remove('is-switching'));
-        };
-        if (reducedMotion.matches) applyImg();
-        else setTimeout(applyImg, 110);
+      if (videoUrl && lbVid) {
+        if (lbImg) lbImg.hidden = true;
+        lbVid.hidden = false;
+        lbVid.poster = trigger.dataset.full || '';
+        lbVid.src = videoUrl;
+        lbVid.load();
+        const p = lbVid.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      } else {
+        stopLightboxVideo();
+        if (lbImg) {
+          lbImg.hidden = false;
+          lbImg.classList.add('is-switching');
+          const nextSrc = trigger.dataset.full || trigger.querySelector('img')?.currentSrc || '';
+          const applyImg = () => {
+            lbImg.src = nextSrc;
+            lbImg.alt = trigger.dataset.title || '';
+            requestAnimationFrame(() => lbImg.classList.remove('is-switching'));
+          };
+          if (reducedMotion.matches) applyImg();
+          else setTimeout(applyImg, 110);
+        }
       }
+
       if (lbCat) lbCat.textContent = trigger.dataset.catLabel || '';
       if (lbTitle) lbTitle.textContent = trigger.dataset.title || '';
       if (lbDesc) lbDesc.textContent = trigger.dataset.desc || '';
@@ -438,6 +562,7 @@
     };
 
     const closeLightbox = () => {
+      stopLightboxVideo();
       if (typeof lightbox.close === 'function' && lightbox.open) {
         lightbox.close();
       } else {
@@ -445,6 +570,8 @@
       }
       if (lastFocusedTrigger) lastFocusedTrigger.focus();
     };
+
+    lightbox.addEventListener('close', stopLightboxVideo);
 
     portfolioItems.forEach((item) => {
       const trigger = item.querySelector('.portfolio-trigger, .gallery-work-trigger');
