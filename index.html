@@ -484,15 +484,15 @@
       </div>
     </section>
 
-    <!-- 6. ANIMATED PORTFOLIO GALLERY PREVIEW (#portfolio — Sectioned by Beauty Line + Lightbox) -->
+    <!-- 6. ANIMATED VIDEO & PHOTO PORTFOLIO PREVIEW (#portfolio — Sectioned by Beauty Line + Lightbox) -->
     <section class="section portfolio-section" id="portfolio" aria-labelledby="portfolio-heading">
       <div class="section-top">
         <div>
-          <p class="eyebrow"><span></span>گالری حرفه‌ای انیمیشنی به تفکیک لاین زیبایی</p>
-          <h2 id="portfolio-heading">گالری نمونه‌کارها و <em>توضیحات فنی اجرا</em></h2>
-          <p>گزیده‌ای از آثار ۶ لاین تخصصی زیبایی هانیس همراه با شرح تکنیک، متریال و زمان اجرا. برای مشاهده هر ۲۰ اثر بخش‌بندی‌شده وارد صفحه گالری شوید.</p>
+          <p class="eyebrow"><span></span>گالری ویدیویی و تصویری به تفکیک لاین زیبایی</p>
+          <h2 id="portfolio-heading">ویدیوهای اجرا و <em>گالری نمونه‌کارهای هانیس</em></h2>
+          <p>گزیده‌ای از ویدیوهای کلوزآپ مراحل اجرا و تصاویر تخصصی ۶ لاین زیبایی هانیس همراه با شرح تکنیک، متریال و زمان اجرا. برای مشاهده هر ۱۲ ویدیو و ۲۰ تصویر بخش‌بندی‌شده وارد صفحه گالری شوید.</p>
         </div>
-        <a class="button gold" href="portfolio/">ورود به گالری کامل ۶ لاین (۲۰ نمونه‌کار) <span>←</span></a>
+        <a class="button gold" href="portfolio/">ورود به گالری کامل (۱۲ ویدیو + ۲۰ عکس در ۶ لاین) <span>←</span></a>
       </div>
 
       <div class="portfolio-filters" role="toolbar" aria-label="فیلتر لاین‌های زیبایی گالری">
@@ -505,203 +505,480 @@
         <button class="portfolio-chip" type="button" data-portfolio-filter="lash" aria-pressed="false">۰۶. مژه و ابرو</button>
       </div>
 
+      <div class="media-type-pills" role="toolbar" aria-label="فیلتر ویدیو یا تصویر" style="margin: -10px 0 26px;">
+        <button class="media-type-chip is-active" type="button" data-media-filter="all" aria-pressed="true">همه آثار برگزیده <b>۱۲</b></button>
+        <button class="media-type-chip" type="button" data-media-filter="video" aria-pressed="false">▶ فقط ویدیوهای اجرایی <b>۶</b></button>
+        <button class="media-type-chip" type="button" data-media-filter="photo" aria-pressed="false">✦ فقط تصاویر نمونه‌کار <b>۶</b></button>
+      </div>
+
       <div class="animated-gallery-grid">
-        <article class="gallery-work-card is-entering" data-category="makeup">
-          <button class="gallery-work-trigger" type="button"
-            data-full="assets/portfolio-editorial-look.jpg"
-            data-cat-label="لاین ۰۱ — میکاپ تخصصی و گریم عروس"
-            data-title="میکاپ گرم تشریفاتی با پوست مخملی طبیعی"
-            data-desc="اجرای زیرسازی سبک با پوشش یکدست، طراحی ابروی نچرال و هماهنگی سایه برنز-شامپاینی با رژلب گرم کلاسیک."
-            data-tech="تکنیک: زیرسازی مخملی + سایه لایت گرم"
-            data-material="متریال: فاندیشن سیلیکونی سبک + فیکس میکرونیزه"
-            data-duration="زمان اجرا: ۹۰ دقیقه"
+        <article class="gallery-work-card is-entering is-video-card" data-category="makeup" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-makeup-eye-lip-poster.jpg"
+            data-video="assets/gallery-vid-makeup-eye-lip.mp4"
+            data-cat-label="لاین میکاپ تخصصی و گریم عروس"
+            data-title="ویدیو کلوزآپ فید سایه طلایی و طراحی لب مخملی با قلم"
+            data-desc="نمایش زنده نحوه فید پیگمنت گرم پشت پلک بدون مرز و اجرای دقیق رژلب مخملی با براش تخت تخصصی در نورپردازی استودیویی."
+            data-tech="تکنیک: فید سایه شاین گرم + لیپ‌لاینینگ دقیق با قلم"
+            data-material="متریال: پیگمنت فشرده طلایی + رژلب کرمی مخملی ماندگار"
+            data-duration="مدت اجرای کامل: ۹۰ دقیقه · ویدیو کلوزآپ"
             data-link="portfolio/#gallery-makeup"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین میکاپ ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین میکاپ و گریم عروس ←">
             <div class="gallery-work-media">
-              <picture>
-                <source srcset="assets/portfolio-editorial-look.webp" type="image/webp">
-                <img src="assets/portfolio-editorial-look.jpg" alt="میکاپ گرم تشریفاتی با پوست مخملی طبیعی در آکادمی هانیس" width="900" height="675" loading="lazy" decoding="async">
-              </picture>
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-makeup-eye-lip.mp4"
+                poster="assets/gallery-vid-makeup-eye-lip-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۱. لاین میکاپ و گریم عروس</span>
-              <span class="work-zoom-icon" aria-hidden="true">+</span>
+              <span class="work-line-tag">۰۱. میکاپ و گریم عروس</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
-            <h3>میکاپ گرم تشریفاتی با پوست مخملی طبیعی</h3>
-            <p>زیرسازی سبک واترپروف، کانتورینگ نوری ملایم و هماهنگی سایه برنز-شامپاینی ویژه مراسم رسمی.</p>
+            <h3>ویدیو کلوزآپ فید سایه طلایی و طراحی لب مخملی با قلم</h3>
+            <p>نمایش زنده نحوه فید پیگمنت گرم پشت پلک بدون مرز و اجرای دقیق رژلب مخملی با براش تخت تخصصی در نورپردازی استودیویی.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> زیرسازی مخملی + سایه لایت گرم</li>
-              <li><strong>زمان اجرا:</strong> ۹۰ دقیقه · <a href="portfolio/#gallery-makeup" style="color:var(--gold-light);">۴ اثر در گالری میکاپ ←</a></li>
+              <li><strong>تکنیک:</strong> فید سایه شاین گرم + لیپ‌لاینینگ دقیق با قلم</li>
+              <li><strong>متریال:</strong> پیگمنت فشرده طلایی + رژلب کرمی مخملی ماندگار</li>
+              <li><strong>مدت اجرای کامل:</strong> ۹۰ دقیقه · ویدیو کلوزآپ</li>
             </ul>
           </div>
         </article>
+        <article class="gallery-work-card is-entering" data-category="makeup" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/portfolio-editorial-look.jpg"
+            data-cat-label="لاین میکاپ تخصصی و گریم عروس"
+            data-title="میکاپ گرم تشریفاتی با پوست مخملی طبیعی"
+            data-desc="اجرای زیرسازی سبک با پوشش یکدست، طراحی ابروی نچرال و هماهنگی سایه برنز-شامپاینی با رژلب گرم کلاسیک ویژه مراسم رسمی."
+            data-tech="تکنیک: زیرسازی مخملی + سایه لایت گرم"
+            data-material="متریال: فاندیشن سیلیکونی سبک + فیکس پودری میکرونیزه"
+            data-duration="زمان اجرا: ۹۰ دقیقه"
+            data-link="portfolio/#gallery-makeup"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین میکاپ و گریم عروس ←">
+            <div class="gallery-work-media">
+              <picture>
+                <source srcset="assets/portfolio-editorial-look.webp" type="image/webp">
+                <img src="assets/portfolio-editorial-look.jpg" alt="میکاپ گرم تشریفاتی با پوست مخملی طبیعی — لاین میکاپ تخصصی و گریم عروس" width="800" height="900" loading="lazy" decoding="async">
+              </picture>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۱. میکاپ و گریم عروس</span>
+              <span class="work-zoom-icon" aria-hidden="true">+</span>
+            </div>
+          </button>
 
-        <article class="gallery-work-card is-entering" data-category="nail">
-          <button class="gallery-work-trigger" type="button"
+          <div class="gallery-work-body">
+            <h3>میکاپ گرم تشریفاتی با پوست مخملی طبیعی</h3>
+            <p>اجرای زیرسازی سبک با پوشش یکدست، طراحی ابروی نچرال و هماهنگی سایه برنز-شامپاینی با رژلب گرم کلاسیک ویژه مراسم رسمی.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> زیرسازی مخملی + سایه لایت گرم</li>
+              <li><strong>متریال:</strong> فاندیشن سیلیکونی سبک + فیکس پودری میکرونیزه</li>
+              <li><strong>زمان اجرا:</strong> ۹۰ دقیقه</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering is-video-card" data-category="nail" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-nail-french-poster.jpg"
+            data-video="assets/gallery-vid-nail-french.mp4"
+            data-cat-label="لاین کاشت، لمینت و طراحی تخصصی ناخن"
+            data-title="ویدیو زنده سوهان‌کشی، ژل‌پولیش و کاشت ژل فرنچ گل برجسته"
+            data-desc="نمایش مراحل فرم‌دهی لبه آزاد ناخن طبیعی، موادگذاری بیس شفاف و نتیجه نهایی کاشت ژل فرنچ صورتی با گل‌های ظریف انکپسوله."
+            data-tech="تکنیک: کاشت بیلدر ژل + دیزاین انکپسوله و فرنچ مدرن"
+            data-material="متریال: بیلدر ژل کلیر و نود + تاپ‌کوت شیشه‌ای الماسی"
+            data-duration="مدت اجرای کامل: ۱۱۰ دقیقه · ویدیو زنده سالن"
+            data-link="portfolio/#gallery-nail"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین کاشت و طراحی ناخن ←">
+            <div class="gallery-work-media">
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-nail-french.mp4"
+                poster="assets/gallery-vid-nail-french-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۲. کاشت و طراحی ناخن</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
+            </div>
+          </button>
+
+          <div class="gallery-work-body">
+            <h3>ویدیو زنده سوهان‌کشی، ژل‌پولیش و کاشت ژل فرنچ گل برجسته</h3>
+            <p>نمایش مراحل فرم‌دهی لبه آزاد ناخن طبیعی، موادگذاری بیس شفاف و نتیجه نهایی کاشت ژل فرنچ صورتی با گل‌های ظریف انکپسوله.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> کاشت بیلدر ژل + دیزاین انکپسوله و فرنچ مدرن</li>
+              <li><strong>متریال:</strong> بیلدر ژل کلیر و نود + تاپ‌کوت شیشه‌ای الماسی</li>
+              <li><strong>مدت اجرای کامل:</strong> ۱۱۰ دقیقه · ویدیو زنده سالن</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering" data-category="nail" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
             data-full="assets/portfolio-nail-macro.jpg"
-            data-cat-label="لاین ۰۲ — کاشت، معماری و طراحی ناخن"
+            data-cat-label="لاین کاشت، لمینت و طراحی تخصصی ناخن"
             data-title="کاشت بیلدر ژل فرم بادامی با پالت نود شامپاینی"
-            data-desc="مانیکور روسی تمیز بدون التهاب کوتیکول، ساخت قوس استاندارد اپکس و اجرای لاک‌ژل نود گرم از ریشه."
+            data-desc="مانیکور روسی تمیز بدون التهاب پوست اطراف ناخن، ساخت قوس طبیعی اپکس و اجرای لاک‌ژل نود گرم از زیر کوتیکول."
             data-tech="تکنیک: بیلدر ژل قالب + مانیکور روسی"
             data-material="متریال: بیلدر ژل سافت نود + تاپ‌کوت آنتی‌اسکرچ"
             data-duration="زمان اجرا: ۹۰ دقیقه"
             data-link="portfolio/#gallery-nail"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین ناخن ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین کاشت و طراحی ناخن ←">
             <div class="gallery-work-media">
               <picture>
                 <source srcset="assets/portfolio-nail-macro.webp" type="image/webp">
-                <img src="assets/portfolio-nail-macro.jpg" alt="کاشت بیلدر ژل فرم بادامی با پالت نود شامپاینی" width="900" height="1125" loading="lazy" decoding="async">
+                <img src="assets/portfolio-nail-macro.jpg" alt="کاشت بیلدر ژل فرم بادامی با پالت نود شامپاینی — لاین کاشت، لمینت و طراحی تخصصی ناخن" width="800" height="900" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۲. لاین کاشت و طراحی ناخن</span>
+              <span class="work-line-tag">۰۲. کاشت و طراحی ناخن</span>
               <span class="work-zoom-icon" aria-hidden="true">+</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
-            <h3>کاشت بیلدر ژل بادامی با پالت نود شامپاینی</h3>
-            <p>مانیکور روسی تمیز بدون التهاب پوست اطراف ناخن و معماری اپکس ظریف بدون ضخامت اضافه.</p>
+            <h3>کاشت بیلدر ژل فرم بادامی با پالت نود شامپاینی</h3>
+            <p>مانیکور روسی تمیز بدون التهاب پوست اطراف ناخن، ساخت قوس طبیعی اپکس و اجرای لاک‌ژل نود گرم از زیر کوتیکول.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> بیلدر ژل + مانیکور روسی ایمن</li>
-              <li><strong>زمان اجرا:</strong> ۹۰ دقیقه · <a href="portfolio/#gallery-nail" style="color:var(--gold-light);">۴ اثر در گالری ناخن ←</a></li>
+              <li><strong>تکنیک:</strong> بیلدر ژل قالب + مانیکور روسی</li>
+              <li><strong>متریال:</strong> بیلدر ژل سافت نود + تاپ‌کوت آنتی‌اسکرچ</li>
+              <li><strong>زمان اجرا:</strong> ۹۰ دقیقه</li>
             </ul>
           </div>
         </article>
+        <article class="gallery-work-card is-entering is-video-card" data-category="hair-color" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-hair-balayage-poster.jpg"
+            data-video="assets/gallery-vid-hair-balayage.mp4"
+            data-cat-label="لاین رنگ، بالیاژ، آمبره و احیای مو"
+            data-title="ویدیو کامل اجرای بالیاژ، فویل‌پیچی، شست‌وشو و موج کاراملی"
+            data-desc="مستند کوتاه مراحل واقعی کار با مواد در سالن؛ از براش‌کشی بالیاژ و بستن فویل تا شست‌وشو با دستکش استریل، براشینگ و نتیجه نهایی."
+            data-tech="تکنیک: بالیاژ فویل‌دار + روت‌شدو و براشینگ موج‌دار"
+            data-material="متریال: پودر روشن‌کننده پلکس‌دار + تونر براق‌کننده اسیدی"
+            data-duration="مدت اجرای کامل: ۴ ساعت · ویدیو مستند کارگاهی"
+            data-link="portfolio/#gallery-hair-color"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین رنگ، لایت و احیای مو ←">
+            <div class="gallery-work-media">
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-hair-balayage.mp4"
+                poster="assets/gallery-vid-hair-balayage-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۳. رنگ، لایت و احیای مو</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
+            </div>
+          </button>
 
-        <article class="gallery-work-card is-entering" data-category="hair-color">
-          <button class="gallery-work-trigger" type="button"
+          <div class="gallery-work-body">
+            <h3>ویدیو کامل اجرای بالیاژ، فویل‌پیچی، شست‌وشو و موج کاراملی</h3>
+            <p>مستند کوتاه مراحل واقعی کار با مواد در سالن؛ از براش‌کشی بالیاژ و بستن فویل تا شست‌وشو با دستکش استریل، براشینگ و نتیجه نهایی.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> بالیاژ فویل‌دار + روت‌شدو و براشینگ موج‌دار</li>
+              <li><strong>متریال:</strong> پودر روشن‌کننده پلکس‌دار + تونر براق‌کننده اسیدی</li>
+              <li><strong>مدت اجرای کامل:</strong> ۴ ساعت · ویدیو مستند کارگاهی</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering" data-category="hair-color" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
             data-full="assets/article-hair.jpg"
-            data-cat-label="لاین ۰۳ — رنگ، بالیاژ و احیای مو"
+            data-cat-label="لاین رنگ، بالیاژ، آمبره و احیای مو"
             data-title="بالیاژ گرم کاراملی-عسلی با روت‌شدو طبیعی"
-            data-desc="روشن‌سازی کنترل‌شده دسته‌های مو با حفظ سلامت پیوندهای ساقه و سایه ریشه برای رشد بدون مرز."
+            data-desc="روشن‌سازی کنترل‌شده دسته‌های مو به روش بالیاژ آزاد، حفظ عمق طبیعی ریشه برای رشد بدون مرز و فینیشینگ موج کلاسیک."
             data-tech="تکنیک: بالیاژ برزیلی + سایه ریشه (Root Melt)"
-            data-material="متریال: پودر دکلره پلکس‌دار + رنگساژ بدون آمونیاک"
+            data-material="متریال: پودر دکلره حاوی پلکس + رنگساژ بدون آمونیاک"
             data-duration="زمان اجرا: ۴ ساعت"
             data-link="portfolio/#gallery-hair-color"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین رنگ مو ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین رنگ، لایت و احیای مو ←">
             <div class="gallery-work-media">
               <picture>
                 <source srcset="assets/article-hair.webp" type="image/webp">
-                <img src="assets/article-hair.jpg" alt="بالیاژ گرم کاراملی با روت‌شدو طبیعی" width="900" height="600" loading="lazy" decoding="async">
+                <img src="assets/article-hair.jpg" alt="بالیاژ گرم کاراملی-عسلی با روت‌شدو طبیعی — لاین رنگ، بالیاژ، آمبره و احیای مو" width="800" height="900" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۳. لاین رنگ، بالیاژ و احیای مو</span>
+              <span class="work-line-tag">۰۳. رنگ، لایت و احیای مو</span>
               <span class="work-zoom-icon" aria-hidden="true">+</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
             <h3>بالیاژ گرم کاراملی-عسلی با روت‌شدو طبیعی</h3>
-            <p>روشن‌سازی کنترل‌شده دسته‌های مو همراه با پلکس محافظ و گذر نوری نرم از ریشه تا انتهای ساقه.</p>
+            <p>روشن‌سازی کنترل‌شده دسته‌های مو به روش بالیاژ آزاد، حفظ عمق طبیعی ریشه برای رشد بدون مرز و فینیشینگ موج کلاسیک.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> بالیاژ آزاد + سایه ریشه (Root Melt)</li>
-              <li><strong>زمان اجرا:</strong> ۴ ساعت · <a href="portfolio/#gallery-hair-color" style="color:var(--gold-light);">۳ اثر در گالری مو ←</a></li>
+              <li><strong>تکنیک:</strong> بالیاژ برزیلی + سایه ریشه (Root Melt)</li>
+              <li><strong>متریال:</strong> پودر دکلره حاوی پلکس + رنگساژ بدون آمونیاک</li>
+              <li><strong>زمان اجرا:</strong> ۴ ساعت</li>
             </ul>
           </div>
         </article>
+        <article class="gallery-work-card is-entering is-video-card" data-category="updo" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-hair-styling-poster.jpg"
+            data-video="assets/gallery-vid-hair-styling.mp4"
+            data-cat-label="لاین شینیون عروس، بافت و استایلینگ مو"
+            data-title="ویدیو گیره‌گذاری، زیرسازی حرارتی با برس گرد و موج کلاسیک"
+            data-desc="نمایش زنده نحوه کنترل دسته‌های مو با کلیپس استایلینگ، زاویه صحیح سشوار و برس گرد و فرم‌دهی موج‌های براق پشت مو."
+            data-tech="تکنیک: براشینگ حجم‌دهنده + فرم‌دهی موج رترو و کلاسیک"
+            data-material="متریال: اسپری دوفاز محافظ حرارت + سرم شاین ضدوز"
+            data-duration="مدت اجرای کامل: ۶۰ دقیقه · ویدیو زنده استایلینگ"
+            data-link="portfolio/#gallery-updo"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین شینیون عروس و بافت ←">
+            <div class="gallery-work-media">
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-hair-styling.mp4"
+                poster="assets/gallery-vid-hair-styling-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۴. شینیون عروس و بافت</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
+            </div>
+          </button>
 
-        <article class="gallery-work-card is-entering" data-category="updo">
-          <button class="gallery-work-trigger" type="button"
+          <div class="gallery-work-body">
+            <h3>ویدیو گیره‌گذاری، زیرسازی حرارتی با برس گرد و موج کلاسیک</h3>
+            <p>نمایش زنده نحوه کنترل دسته‌های مو با کلیپس استایلینگ، زاویه صحیح سشوار و برس گرد و فرم‌دهی موج‌های براق پشت مو.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> براشینگ حجم‌دهنده + فرم‌دهی موج رترو و کلاسیک</li>
+              <li><strong>متریال:</strong> اسپری دوفاز محافظ حرارت + سرم شاین ضدوز</li>
+              <li><strong>مدت اجرای کامل:</strong> ۶۰ دقیقه · ویدیو زنده استایلینگ</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering" data-category="updo" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
             data-full="assets/course-updo.jpg"
-            data-cat-label="لاین ۰۴ — شینیون عروس و بافت مو"
-            data-title="شینیون رمانتیک عروس با دیزاین گل طبیعی"
-            data-desc="اجرای شینیون جمع پایین با موج‌های نرم اروپایی، سنجاق‌گیری مخفی و نصب متقارن گل‌های طبیعی."
+            data-cat-label="لاین شینیون عروس، بافت و استایلینگ مو"
+            data-title="شینیون رمانتیک عروس با دیزاین گل طبیعی رز"
+            data-desc="اجرای شینیون جمع پایین با موج‌های نرم و آزاد، حفظ بافت طبیعی مو بدون خشکی تافت و نصب متقارن گل‌های طبیعی در تاج شینیون."
             data-tech="تکنیک: شینیون اروپایی مواج (Soft Textured Bun)"
-            data-material="متریال: موس حجم‌دهنده سبک + فیکس خشک بدون سفیدک"
+            data-material="متریال: موس حجم‌دهنده سبک + اسپری فیکس خشک بدون سفیدک"
             data-duration="زمان اجرا: ۸۰ دقیقه"
             data-link="portfolio/#gallery-updo"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین شینیون ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین شینیون عروس و بافت ←">
             <div class="gallery-work-media">
               <picture>
                 <source srcset="assets/course-updo.webp" type="image/webp">
-                <img src="assets/course-updo.jpg" alt="شینیون رمانتیک عروس با دیزاین گل طبیعی" width="900" height="675" loading="lazy" decoding="async">
+                <img src="assets/course-updo.jpg" alt="شینیون رمانتیک عروس با دیزاین گل طبیعی رز — لاین شینیون عروس، بافت و استایلینگ مو" width="800" height="900" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۴. لاین شینیون عروس و بافت</span>
+              <span class="work-line-tag">۰۴. شینیون عروس و بافت</span>
               <span class="work-zoom-icon" aria-hidden="true">+</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
-            <h3>شینیون رمانتیک عروس با دیزاین گل طبیعی</h3>
-            <p>شینیون جمع پایین با موج‌های نرم و آزاد، حفظ طراوت تار مو و سنجاق‌گیری کاملاً مخفی و مستحکم.</p>
+            <h3>شینیون رمانتیک عروس با دیزاین گل طبیعی رز</h3>
+            <p>اجرای شینیون جمع پایین با موج‌های نرم و آزاد، حفظ بافت طبیعی مو بدون خشکی تافت و نصب متقارن گل‌های طبیعی در تاج شینیون.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> شینیون اروپایی مواج بدون وز</li>
-              <li><strong>زمان اجرا:</strong> ۸۰ دقیقه · <a href="portfolio/#gallery-updo" style="color:var(--gold-light);">۳ اثر در گالری شینیون ←</a></li>
+              <li><strong>تکنیک:</strong> شینیون اروپایی مواج (Soft Textured Bun)</li>
+              <li><strong>متریال:</strong> موس حجم‌دهنده سبک + اسپری فیکس خشک بدون سفیدک</li>
+              <li><strong>زمان اجرا:</strong> ۸۰ دقیقه</li>
             </ul>
           </div>
         </article>
+        <article class="gallery-work-card is-entering is-video-card" data-category="skin" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-facial-spa-poster.jpg"
+            data-video="assets/gallery-vid-facial-spa.mp4"
+            data-cat-label="لاین فیشیال، پاک‌سازی و آبرسانی تخصصی پوست"
+            data-title="ویدیو کابین پوست؛ ماسک‌گذاری با قلم بادبزنی، ماساژ و کمپرس گرم"
+            data-desc="نمایش زنده نحوه پخش یکنواخت ماسک آبرسان روی گونه با قلم کابینی، ماساژ ریلکسیشن و لیفتینگ دوطرفه و پاک‌سازی با حوله گرم استریل."
+            data-tech="تکنیک: ماسک‌تراپی کابینی + ماساژ لنفاوی و کمپرس بخار"
+            data-material="متریال: ماسک کرمی سرامید و پانتنول + حوله میکروفایبر گرم"
+            data-duration="مدت اجرای کامل: ۷۰ دقیقه · ویدیو زنده کابین پوست"
+            data-link="portfolio/#gallery-skin"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین فیشیال و مراقبت پوست ←">
+            <div class="gallery-work-media">
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-facial-spa.mp4"
+                poster="assets/gallery-vid-facial-spa-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۵. فیشیال و مراقبت پوست</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
+            </div>
+          </button>
 
-        <article class="gallery-work-card is-entering" data-category="skin">
-          <button class="gallery-work-trigger" type="button"
+          <div class="gallery-work-body">
+            <h3>ویدیو کابین پوست؛ ماسک‌گذاری با قلم بادبزنی، ماساژ و کمپرس گرم</h3>
+            <p>نمایش زنده نحوه پخش یکنواخت ماسک آبرسان روی گونه با قلم کابینی، ماساژ ریلکسیشن و لیفتینگ دوطرفه و پاک‌سازی با حوله گرم استریل.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> ماسک‌تراپی کابینی + ماساژ لنفاوی و کمپرس بخار</li>
+              <li><strong>متریال:</strong> ماسک کرمی سرامید و پانتنول + حوله میکروفایبر گرم</li>
+              <li><strong>مدت اجرای کامل:</strong> ۷۰ دقیقه · ویدیو زنده کابین پوست</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering" data-category="skin" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
             data-full="assets/course-facial.jpg"
-            data-cat-label="لاین ۰۵ — فیشیال و مراقبت تخصصی پوست"
-            data-title="سرم‌تراپی هیالورونیک و پپتید (گلوئینگ عروس)"
-            data-desc="آبرسانی عمقی چندلایه همراه با ماساژ لیفتینگ صورت جهت ایجاد درخشش طبیعی و آماده‌سازی پوست پیش از مراسم."
+            data-cat-label="لاین فیشیال، پاک‌سازی و آبرسانی تخصصی پوست"
+            data-title="سرم‌تراپی هیالورونیک و پپتید (پروتکل گلوئینگ عروس)"
+            data-desc="تزریق سطحی و جذب عمقی ویال‌های آبرسان و شفاف‌کننده همراه با ماساژ لیفتینگ صورت جهت ایجاد درخشش طبیعی و آماده‌سازی ایده‌آل زیرسازی میکاپ."
             data-tech="تکنیک: هیدروفیشیال + سرم‌تراپی چندلایه"
-            data-material="متریال: ویال هیالورونیک اسید + نیاسینامید کابینی"
+            data-material="متریال: ویال هیالورونیک اسید خالص + نیاسینامید کابینی"
             data-duration="زمان اجرا: ۷۰ دقیقه"
             data-link="portfolio/#gallery-skin"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین فیشیال ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین فیشیال و مراقبت پوست ←">
             <div class="gallery-work-media">
               <picture>
                 <source srcset="assets/course-facial.webp" type="image/webp">
-                <img src="assets/course-facial.jpg" alt="سرم‌تراپی هیالورونیک و فیشیال تخصصی پوست" width="900" height="675" loading="lazy" decoding="async">
+                <img src="assets/course-facial.jpg" alt="سرم‌تراپی هیالورونیک و پپتید (پروتکل گلوئینگ عروس) — لاین فیشیال، پاک‌سازی و آبرسانی تخصصی پوست" width="800" height="900" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۵. لاین فیشیال و مراقبت پوست</span>
+              <span class="work-line-tag">۰۵. فیشیال و مراقبت پوست</span>
               <span class="work-zoom-icon" aria-hidden="true">+</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
-            <h3>سرم‌تراپی هیالورونیک و پپتید (گلوئینگ پوست)</h3>
-            <p>پاک‌سازی غیرتهاجمی منافذ و جذب ویال‌های آبرسان تخصصی جهت احیای سد دفاعی و شفافیت پوست.</p>
+            <h3>سرم‌تراپی هیالورونیک و پپتید (پروتکل گلوئینگ عروس)</h3>
+            <p>تزریق سطحی و جذب عمقی ویال‌های آبرسان و شفاف‌کننده همراه با ماساژ لیفتینگ صورت جهت ایجاد درخشش طبیعی و آماده‌سازی ایده‌آل زیرسازی میکاپ.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> هیدروفیشیال + ماساژ تخلیه لنفاوی</li>
-              <li><strong>زمان اجرا:</strong> ۷۰ دقیقه · <a href="portfolio/#gallery-skin" style="color:var(--gold-light);">۳ اثر در گالری پوست ←</a></li>
+              <li><strong>تکنیک:</strong> هیدروفیشیال + سرم‌تراپی چندلایه</li>
+              <li><strong>متریال:</strong> ویال هیالورونیک اسید خالص + نیاسینامید کابینی</li>
+              <li><strong>زمان اجرا:</strong> ۷۰ دقیقه</li>
             </ul>
           </div>
         </article>
+        <article class="gallery-work-card is-entering is-video-card" data-category="lash" data-media-type="video">
+          <button class="video-inline-toggle" type="button" aria-pressed="false" aria-label="پخش یا توقف پیش‌نمایش ویدیو">▶ پخش ویدیو</button>
+          <button
+            class="gallery-work-trigger"
+            type="button"
+            data-full="assets/gallery-vid-lash-brow-poster.jpg"
+            data-video="assets/gallery-vid-lash-brow.mp4"
+            data-cat-label="لاین اکستنشن مژه، مپ‌کشی و لیفت مژه و ابرو"
+            data-title="ریلز ماکرو ایزوله‌سازی با پنس، مپ‌کشی و نصب تار اکستنشن مژه"
+            data-desc="نمایش دقیق جداسازی تار مژه طبیعی با دو پنس استریل، نقطه‌گذاری سایزبندی مپ روی پد هیدروژلی و فن‌گذاری ظریف بدون چسبندگی."
+            data-tech="تکنیک: ایزوله‌سازی استاندارد + والیوم روسی ۳ بعدی"
+            data-material="متریال: تار ابریشمی ۰.۰۷ مات + چسب ایزوله نیم‌ثانیه"
+            data-duration="مدت اجرای کامل: ۱۱۰ دقیقه · ویدیو نمای ماکرو"
+            data-link="portfolio/#gallery-lash"
+            data-link-label="مشاهده ویدیوها و تصاویر لاین مژه و ابرو (اکستنشن و لیفت) ←">
+            <div class="gallery-work-media">
+              <span class="video-live-badge"><i></i>ویدیو اجرا · HD</span>
+              <video
+                class="gallery-card-video"
+                data-video-src="assets/gallery-vid-lash-brow.mp4"
+                poster="assets/gallery-vid-lash-brow-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"></video>
+            </div>
+            <div class="work-overlay-drawer">
+              <span class="work-line-tag">۰۶. مژه و ابرو (اکستنشن و لیفت)</span>
+              <span class="work-zoom-icon is-play" aria-hidden="true">▶</span>
+            </div>
+          </button>
 
-        <article class="gallery-work-card is-entering" data-category="lash">
-          <button class="gallery-work-trigger" type="button"
+          <div class="gallery-work-body">
+            <h3>ریلز ماکرو ایزوله‌سازی با پنس، مپ‌کشی و نصب تار اکستنشن مژه</h3>
+            <p>نمایش دقیق جداسازی تار مژه طبیعی با دو پنس استریل، نقطه‌گذاری سایزبندی مپ روی پد هیدروژلی و فن‌گذاری ظریف بدون چسبندگی.</p>
+            <ul class="work-specs-list">
+              <li><strong>تکنیک:</strong> ایزوله‌سازی استاندارد + والیوم روسی ۳ بعدی</li>
+              <li><strong>متریال:</strong> تار ابریشمی ۰.۰۷ مات + چسب ایزوله نیم‌ثانیه</li>
+              <li><strong>مدت اجرای کامل:</strong> ۱۱۰ دقیقه · ویدیو نمای ماکرو</li>
+            </ul>
+          </div>
+        </article>
+        <article class="gallery-work-card is-entering" data-category="lash" data-media-type="photo">
+          <button
+            class="gallery-work-trigger"
+            type="button"
             data-full="assets/course-lash-brow.jpg"
-            data-cat-label="لاین ۰۶ — اکستنشن مژه و لیفت ابرو"
+            data-cat-label="لاین اکستنشن مژه، مپ‌کشی و لیفت مژه و ابرو"
             data-title="ایزوله‌سازی دقیق و اکستنشن والیوم ابریشمی سبک"
-            data-desc="جداسازی کامل تک‌تک مژه‌های طبیعی با پنس استریل و نصب فن‌های دست‌ساز ابریشمی با فاصله ایمن از خط پلک."
+            data-desc="جداسازی کامل تک‌تک مژه‌های طبیعی با پنس استریل و نصب فن‌های دست‌ساز فوق‌سبک با رعایت فاصله ایمن نیم‌میلی‌متری از خط پلک."
             data-tech="تکنیک: اکستنشن والیوم روسی (Russian Volume 3D)"
-            data-material="متریال: تار ابریشمی ۰.۰۷ فر CC + چسب ضدحساسیت"
+            data-material="متریال: تار ابریشمی ضخامت ۰.۰۷ فر CC + چسب ضدحساسیت"
             data-duration="زمان اجرا: ۱۱۰ دقیقه"
             data-link="portfolio/#gallery-lash"
-            data-link-label="مشاهده تمام نمونه‌کارهای لاین مژه و ابرو ←">
+            data-link-label="مشاهده ویدیوها و تصاویر لاین مژه و ابرو (اکستنشن و لیفت) ←">
             <div class="gallery-work-media">
               <picture>
                 <source srcset="assets/course-lash-brow.webp" type="image/webp">
-                <img src="assets/course-lash-brow.jpg" alt="اکستنشن والیوم ابریشمی مژه در آکادمی هانیس" width="900" height="675" loading="lazy" decoding="async">
+                <img src="assets/course-lash-brow.jpg" alt="ایزوله‌سازی دقیق و اکستنشن والیوم ابریشمی سبک — لاین اکستنشن مژه، مپ‌کشی و لیفت مژه و ابرو" width="800" height="900" loading="lazy" decoding="async">
               </picture>
             </div>
             <div class="work-overlay-drawer">
-              <span class="work-line-tag">۰۶. لاین اکستنشن مژه و لیفت ابرو</span>
+              <span class="work-line-tag">۰۶. مژه و ابرو (اکستنشن و لیفت)</span>
               <span class="work-zoom-icon" aria-hidden="true">+</span>
             </div>
           </button>
+
           <div class="gallery-work-body">
-            <h3>اکستنشن والیوم ابریشمی با مپ اختصاصی چشم</h3>
-            <p>جداسازی اصولی بدون چسبندگی مژه‌ها به یکدیگر (بدون استیکی) و حفظ سلامت فولیکول مژه طبیعی.</p>
+            <h3>ایزوله‌سازی دقیق و اکستنشن والیوم ابریشمی سبک</h3>
+            <p>جداسازی کامل تک‌تک مژه‌های طبیعی با پنس استریل و نصب فن‌های دست‌ساز فوق‌سبک با رعایت فاصله ایمن نیم‌میلی‌متری از خط پلک.</p>
             <ul class="work-specs-list">
-              <li><strong>تکنیک:</strong> والیوم روسی ۳ بعدی + مپ‌کشی آناتومیک</li>
-              <li><strong>زمان اجرا:</strong> ۱۱۰ دقیقه · <a href="portfolio/#gallery-lash" style="color:var(--gold-light);">۳ اثر در گالری مژه ←</a></li>
+              <li><strong>تکنیک:</strong> اکستنشن والیوم روسی (Russian Volume 3D)</li>
+              <li><strong>متریال:</strong> تار ابریشمی ضخامت ۰.۰۷ فر CC + چسب ضدحساسیت</li>
+              <li><strong>زمان اجرا:</strong> ۱۱۰ دقیقه</li>
             </ul>
           </div>
         </article>
       </div>
 
       <div class="portfolio-note">
-        <span>در صفحه اختصاصی گالری نمونه‌کارها، هر ۶ لاین زیبایی در بخش‌های مجزا به همراه ۲۰ تصویر متنوع و شناسنامه کامل کار ارائه شده‌اند.</span>
-        <a class="text-link" href="portfolio/">ورود به صفحه گالری انیمیشنی نمونه‌کارها <span>←</span></a>
+        <span>در صفحه اختصاصی گالری نمونه‌کارها، هر ۶ لاین زیبایی در بخش‌های مجزا به همراه ۱۲ ویدیو تخصصی اجرا و ۲۰ تصویر متنوع با شناسنامه کامل کار ارائه شده‌اند.</span>
+        <a class="text-link" href="portfolio/">ورود به صفحه کامل گالری ویدیویی و تصویری <span>←</span></a>
       </div>
 
       <dialog class="lightbox-modal" id="portfolio-lightbox" aria-labelledby="lightbox-title">
@@ -709,12 +986,13 @@
           <div class="lightbox-top">
             <span id="lightbox-category"></span>
             <div style="display:flex; align-items:center; gap:14px;">
-              <span class="lightbox-counter" id="lightbox-counter" dir="ltr">01 / 06</span>
+              <span class="lightbox-counter" id="lightbox-counter" dir="ltr">01 / 12</span>
               <button class="lightbox-close" type="button" aria-label="بستن پنجره بزرگ‌نمایی">✕</button>
             </div>
           </div>
           <div class="lightbox-stage">
             <img id="lightbox-image" src="assets/hero.jpg" alt="">
+            <video id="lightbox-video" controls playsinline loop hidden></video>
           </div>
           <div class="lightbox-bottom">
             <div class="lightbox-info" style="flex:1; min-width:260px;">
@@ -723,8 +1001,8 @@
               <div class="lightbox-specs-bar" id="lightbox-specs"></div>
             </div>
             <div class="lightbox-controls">
-              <button class="lightbox-nav-btn" id="lightbox-prev" type="button" aria-label="تصویر قبلی">→</button>
-              <button class="lightbox-nav-btn" id="lightbox-next" type="button" aria-label="تصویر بعدی">←</button>
+              <button class="lightbox-nav-btn" id="lightbox-prev" type="button" aria-label="اثر قبلی">→</button>
+              <button class="lightbox-nav-btn" id="lightbox-next" type="button" aria-label="اثر بعدی">←</button>
               <a class="button gold" id="lightbox-cta" href="portfolio/">مشاهده بخش مرتبط ←</a>
             </div>
           </div>
